@@ -14,6 +14,8 @@ class SimpleMap extends Component {
   };
  
   render() {
+    const { children } = this.props;
+    debugger;
     const iconStyle = {
         pointer: 'cursor'
     }
@@ -25,7 +27,8 @@ class SimpleMap extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          <Icon
+          {children}
+          {/* <Icon
             lat={61.1955413}
             lng={-149.9337844}
             type='home'
@@ -40,7 +43,7 @@ class SimpleMap extends Component {
             theme='twoTone'
             twoToneColor='#52c41a'
             onClick={() => this.props.slideOut()}
-          />
+          /> */}
         </GoogleMapReact>
       </div>
     );

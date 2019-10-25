@@ -1,10 +1,13 @@
 import React from "react";
-import { Layout, Dropdown, Menu, Breadcrumb, Icon } from "antd";
-const { Header, Content, Sider } = Layout;
+import styled from "styled-components";
+import { Layout, Dropdown, Menu, Breadcrumb, Icon, AutoComplete, Input } from "antd";
+import Logo from './Logo';
+
+const { Header } = Layout;
 
 const districtMenu = (selectedDataset, onChangeDataset) => (
   <Menu
-    theme="dark"
+    theme="light"
     mode="horizontal"
     selectedKeys={[selectedDataset]}
     style={{ lineHeight: "64px" }}
@@ -18,7 +21,7 @@ const districtMenu = (selectedDataset, onChangeDataset) => (
 );
 const yearMenu = (selectedYear, onChangeYear) => (
   <Menu
-    theme="dark"
+    theme="light"
     mode="horizontal"
     selectedKeys={[selectedYear]}
     style={{ lineHeight: "64px" }}
@@ -31,32 +34,87 @@ const yearMenu = (selectedYear, onChangeYear) => (
   </Menu>
 );
 
-export default ({ selectedYear, selectedDataset, onChangeFilter }) => (
-  <Header className="header">
-    <div className="logo" />
-    <Dropdown
-      overlay={districtMenu(selectedDataset, key => {
-        onChangeFilter("dataset", key);
-      })}
-      style={{ margin: "5px" }}
-      trigger="click"
-    >
-      <a className="ant-dropdown-link" href="#">
-        <Icon type="down" />
-        Select Dataset
-      </a>
-    </Dropdown>
-    ||||
-    <Dropdown
-      overlay={yearMenu(selectedYear, key => {
-        onChangeFilter("year", key);
-      })}
-      trigger="click"
-    >
-      <a className="ant-dropdown-link" href="#">
-        <Icon type="down" />
-        Select Year
-      </a>
-    </Dropdown>
-  </Header>
+const FilterIcon = styled(Icon)`
+  margin-right: 5px;
+`;
+
+const FilterNav = styled.div`
+  height: 40px;
+  background: white;
+  display: grid;
+  align-items: center;
+  padding-left: 70px;
+  border-bottom: 1px solid whitesmoke;
+  box-shadow: 0 8px 6px -6px black;
+  `;
+
+const MainNav = styled(Header)`
+  padding-left: 70px;
+  padding-right: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+
+
+export default ({
+  selectedYear,
+  selectedDataset,
+  onChangeFilter,
+  onSelectSchool,
+  locationKeys
+}) => (
+  <div>
+    <MainNav className="header MainNav">
+      <AutoComplete
+        dataSource={locationKeys}
+        onSelect={onSelectSchool}
+        placeholder="Search by school name"
+        filterOption={(inputValue, option) =>
+          option.props.children
+            .toUpperCase()
+            .indexOf(inputValue.toUpperCase()) !== -1
+        }
+      >
+        <Input
+          suffix={<Icon type="search" className="certain-category-icon" />}
+        />
+      </AutoComplete>
+      <Logo />
+      {/* <div className="logo" /> */}
+    </MainNav>
+    <FilterNav className="FilterNav">
+      <div className="filters-container">
+        <div
+          className="dropdown-container"
+          style={{ marginRight: "10px", display: "inline" }}
+        >
+          <Dropdown
+            overlay={districtMenu(selectedDataset, key => {
+              onChangeFilter("dataset", key);
+            })}
+            trigger="click"
+          >
+            <a className="ant-dropdown-link" href="#">
+              <FilterIcon type="down" />
+              Select Dataset
+            </a>
+          </Dropdown>
+        </div>
+
+        <Dropdown
+          overlay={yearMenu(selectedYear, key => {
+            onChangeFilter("year", key);
+          })}
+          trigger="click"
+        >
+          <a className="ant-dropdown-link" href="#">
+            <FilterIcon type="down" />
+            Select Year
+          </a>
+        </Dropdown>
+      </div>
+    </FilterNav>
+  </div>
 );
