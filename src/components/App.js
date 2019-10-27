@@ -1,7 +1,8 @@
 import React from "react";
 import "../App.less";
-import { Layout } from "antd";
+import { Layout, Modal } from "antd";
 import styled from "styled-components";
+import MediaQuery from "react-responsive";
 import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
@@ -16,6 +17,10 @@ const ContentGrid = styled(Content)`
   display: grid;
   grid-template-columns: 60% 38%;
   grid-column-gap: 2%;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const locationCoordinates = {
@@ -62,6 +67,7 @@ class App extends React.Component {
         type="home"
         theme="twoTone"
         twoToneColor="#eb2f96"
+        onClick={() => this.setState({ selectedSchool: marker })}
       />
     ));
     // const Markers = Object.keys(selectedDistrictCoordinates).map(marker => (
@@ -71,7 +77,6 @@ class App extends React.Component {
     //     color="white"
     //   />
     // ));
-
 
     // github.com/google-map-react/old-examples/blob/master/web/flux/components/examples/x_main/main_map_block.jsx
     return (
@@ -84,6 +89,10 @@ class App extends React.Component {
           onSelectSchool={school => this.setState({ selectedSchool: school })}
           locationKeys={Object.keys(selectedDistrictCoordinates)}
         />
+        {/* https://ant.design/components/modal/ */}
+        <Modal centered visible>
+          <SideBar />
+        </Modal>
         {/* {this.state.selectedSchool} */}
         <Layout>
           {/* <Layout style={{ padding: "0 24px 24px" }}> */}
@@ -97,7 +106,10 @@ class App extends React.Component {
             }}
           >
             <MapContainer>{Markers}</MapContainer>
-            <SideBar />
+
+            <MediaQuery maxWidth={768}>
+              <SideBar />
+            </MediaQuery>
           </ContentGrid>
           {/* </Layout> */}
         </Layout>

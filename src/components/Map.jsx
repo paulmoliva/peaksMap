@@ -15,9 +15,8 @@ class SimpleMap extends Component {
  
   render() {
     const { children } = this.props;
-    debugger;
     const iconStyle = {
-        pointer: 'cursor'
+      pointer: 'cursor'
     }
     return (
       // Important! Always set the container height explicitly
