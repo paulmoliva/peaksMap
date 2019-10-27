@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Typography } from "antd";
-const { Title, Paragraph } = Typography;
+import { Typography, Tabs, Divider, Spin } from "antd";
+const { Title, Paragraph, Text } = Typography;
+const { TabPane } = Tabs;
 
 const SideBarStyle = styled.div`
   background: white;
+  /* max-height: ${props => props.maxHeight}; */
 `;
 
 const WelcomeDetailsStyle = styled.div`
@@ -29,8 +31,83 @@ const WelcomeDetails = () => (
   </WelcomeDetailsStyle>
 );
 
-export default () => (
-  <SideBarStyle>
-    <WelcomeDetails />
-  </SideBarStyle>
+const TabPaneContent = styled.div`
+  display: ${props => (props.loading ? "flex" : "block")};
+  padding-top: ${props => (props.loading ? "30px" : "0")};
+  justify-content: center;
+`;
+
+const createTabPane = (subject, key, schoolData, loadingSchool) => {
+  const subjectGradeData = schoolData.filter(
+    school => school.Subject === subject
+  );
+
+  let prettySchoolData = subjectGradeData.map(data => (
+    <div>
+      <Paragraph style={{ marginBottom: "200px" }}>
+        Grade {data.grade}:
+      </Paragraph>
+      <Paragraph>
+        <Text strong> {data.NotProficientPercent.split("%")[0]} </Text>
+        <Text>{data.NotProficientPercent.split("%")[1]}</Text>
+      </Paragraph>
+    </div>
+  ));
+
+  if (!prettySchoolData.length && !loadingSchool) {
+    prettySchoolData = (
+      <div>
+        <Paragraph>No data found.</Paragraph>
+      </div>
+    );
+  }
+
+  return (
+    <TabPane tab={subject} key={key}>
+      <TabPaneContent loading={loadingSchool}>
+        {loadingSchool ? <Spin /> : prettySchoolData}
+      </TabPaneContent>
+    </TabPane>
+  );
+};
+
+const SchoolDetails = ({
+  selectedSchool,
+  selectedYear,
+  schoolData,
+  loadingSchool
+}) => (
+  <WelcomeDetailsStyle>
+    <Title>{selectedSchool}</Title>
+    <Paragraph> Year: {selectedYear} </Paragraph>
+    <Divider />
+    <Tabs animated={false}>
+      {createTabPane("ELA", "1", schoolData, loadingSchool)}
+      {createTabPane("Math", "2", schoolData, loadingSchool)}
+      {createTabPane("Science", "3", schoolData, loadingSchool)}
+    </Tabs>
+  </WelcomeDetailsStyle>
 );
+
+export default ({
+  schoolData,
+  selectedSchool,
+  selectedYear,
+  loadingSchool,
+  height
+}) => {
+  return (
+    <SideBarStyle maxHeight={height}>
+      {selectedSchool ? (
+        <SchoolDetails
+          schoolData={schoolData}
+          loadingSchool={loadingSchool}
+          selectedSchool={selectedSchool}
+          selectedYear={selectedYear}
+        />
+      ) : (
+        <WelcomeDetails />
+      )}
+    </SideBarStyle>
+  );
+};

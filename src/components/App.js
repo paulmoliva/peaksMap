@@ -6,9 +6,10 @@ import MediaQuery from "react-responsive";
 import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
-import asdLocations from "../data/asd";
-import alaskaLocations from "../data/alaska";
+import { asdLocations, asdScores } from "../data/asd";
+import { alaskaLocations, alaskaScores } from "../data/alaska";
 import { Icon } from "antd";
+const qs = require("qs");
 
 const { Content } = Layout;
 
@@ -28,28 +29,81 @@ const locationCoordinates = {
   alaska: alaskaLocations
 };
 
-const Marker = styled.div`
-  border-radius: 100;
-  width: 2000px;
-  height: 2000px;
-  z-index: 10000;
-  /* background: ${props => props.color}; */
-  background: "white";
-`;
+const scores = {
+  asd: asdScores,
+  alaska: alaskaScores
+};
 
 class App extends React.Component {
   state = {
     selectedSchool: null,
     selectedYear: "1", // || 1: 2018 - 2: 2017
-    selectedDataset: "1" // || 1: 'asd' - 2: 'statewide'
+    selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
+    schoolData: [],
+    loadingSchool: false
   };
 
   onChangeFilter(filter, key) {
     if (filter === "year") {
-      this.setState({ selectedYear: key });
+      this.setState({ selectedYear: key }, () => {
+        this.fetchSchoolData();
+      });
     } else {
       this.setState({ selectedDataset: key });
     }
+  }
+
+  async fetchSchoolData() {
+    // http://payroll.alaskapolicyforum.net/peaks/?school_name=Susitna%20Elementary&year=2018
+
+    const { selectedSchool, selectedYear } = this.state;
+    const baseUrl =
+      "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
+    const year = selectedYear === "1" ? 2018 : 2017;
+    const queryStr = qs.stringify({ school_name: selectedSchool, year });
+    const urlStr = `${baseUrl}${queryStr}`;
+
+    this.setState({ loadingSchool: true });
+    const response = await fetch(urlStr);
+    const schoolData = await response.json();
+    this.setState({ schoolData, loadingSchool: false });
+  }
+
+  makeMarkers(selectedDistrictCoordinates, selectedScores) {
+    const determineFillColor = marker => {
+      const currentScores = selectedScores[marker];
+      if (!currentScores) {
+        return "white";
+      } else {
+        const averageScore =
+          (parseInt(currentScores["Math"]) + parseInt(currentScores["ELA"])) /
+          2;
+
+        if (averageScore < 31) {
+          return "green";
+        } else if (averageScore < 51) {
+          return "yellow";
+        } else {
+          return "red";
+        }
+      }
+    };
+
+    return Object.keys(selectedDistrictCoordinates).map(marker => (
+      <Icon
+        lat={selectedDistrictCoordinates[marker].lat}
+        lng={selectedDistrictCoordinates[marker].lng}
+        type="home"
+        theme="twoTone"
+        twoToneColor={determineFillColor(marker)}
+        // twoToneColor="#eb2f96"
+        onClick={() =>
+          this.setState({ selectedSchool: marker }, () => {
+            this.fetchSchoolData(marker);
+          })
+        }
+      />
+    ));
   }
 
   render() {
@@ -60,25 +114,14 @@ class App extends React.Component {
         ? locationCoordinates.asd
         : locationCoordinates.alaska;
 
-    const Markers = Object.keys(selectedDistrictCoordinates).map(marker => (
-      <Icon
-        lat={selectedDistrictCoordinates[marker].lat}
-        lng={selectedDistrictCoordinates[marker].lng}
-        type="home"
-        theme="twoTone"
-        twoToneColor="#eb2f96"
-        onClick={() => this.setState({ selectedSchool: marker })}
-      />
-    ));
-    // const Markers = Object.keys(selectedDistrictCoordinates).map(marker => (
-    //   <Marker
-    //     lat={selectedDistrictCoordinates[marker].lat}
-    //     lng={selectedDistrictCoordinates[marker].lng}
-    //     color="white"
-    //   />
-    // ));
+    // const selectedScores = selectedDataset === "1" ? scores.asd : scores.alaska;
+    const selectedScores = scores.asd;
 
-    // github.com/google-map-react/old-examples/blob/master/web/flux/components/examples/x_main/main_map_block.jsx
+    const Markers = this.makeMarkers(
+      selectedDistrictCoordinates,
+      selectedScores
+    );
+
     return (
       <Layout>
         <NavBar
@@ -90,9 +133,9 @@ class App extends React.Component {
           locationKeys={Object.keys(selectedDistrictCoordinates)}
         />
         {/* https://ant.design/components/modal/ */}
-        <Modal centered visible>
+        {/* <Modal centered visible>
           <SideBar />
-        </Modal>
+        </Modal> */}
         {/* {this.state.selectedSchool} */}
         <Layout>
           {/* <Layout style={{ padding: "0 24px 24px" }}> */}
@@ -105,10 +148,16 @@ class App extends React.Component {
               minHeight: 280
             }}
           >
-            <MapContainer>{Markers}</MapContainer>
+            <MapContainer height="76vh">{Markers}</MapContainer>
 
-            <MediaQuery maxWidth={768}>
-              <SideBar />
+            <MediaQuery minWidth={768}>
+              <SideBar
+                selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
+                selectedSchool={this.state.selectedSchool}
+                schoolData={this.state.schoolData}
+                loadingSchool={this.state.loadingSchool}
+                height="76vh"
+              />
             </MediaQuery>
           </ContentGrid>
           {/* </Layout> */}

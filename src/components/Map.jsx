@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Icon } from 'antd';
  
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
  
 class SimpleMap extends Component {
   static defaultProps = {
@@ -14,13 +13,13 @@ class SimpleMap extends Component {
   };
  
   render() {
-    const { children } = this.props;
+    const { children, height } = this.props;
     const iconStyle = {
       pointer: 'cursor'
     }
     return (
       // Important! Always set the container height explicitly
-      <div style={{ height: '76vh', width: '100%' }}>
+      <div style={{ height, width: '100%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE' }}
           defaultCenter={this.props.center}

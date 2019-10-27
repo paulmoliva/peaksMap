@@ -53,9 +53,9 @@ const LegendItem = ({ initialRange, finalRange }) => {
   );
 };
 
-export default ({ children }) => (
+export default ({ children, height }) => (
   <MapContainer>
-    <Map>{children}</Map>
+    <Map height={height}>{children}</Map>
     <Legend className="Legend">
       <LegendItem initialRange={0} finalRange={30}></LegendItem>
       <LegendItem initialRange={31} finalRange={50}></LegendItem>
