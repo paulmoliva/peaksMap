@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Typography } from "antd";
+import { Typography, Icon } from "antd";
+import MediaQuery from "react-responsive";
+
 import Map from "./Map";
 
 const { Title, Paragraph } = Typography;
@@ -53,13 +55,26 @@ const LegendItem = ({ initialRange, finalRange }) => {
   );
 };
 
-export default ({ children, height }) => (
+let HelpButton = () => <Icon type="home" />;
+
+HelpButton = styled(HelpButton)`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
+
+export default ({ children, height, selectedDataSet }) => (
   <MapContainer>
-    <Map height={height}>{children}</Map>
+    <Map height={height} zoom={selectedDataSet === "2" ? 5 : 11}>
+      {children}
+    </Map>
     <Legend className="Legend">
       <LegendItem initialRange={0} finalRange={30}></LegendItem>
       <LegendItem initialRange={31} finalRange={50}></LegendItem>
       <LegendItem initialRange={51} finalRange={100}></LegendItem>
     </Legend>
+    <MediaQuery maxWidth={768}>
+      <HelpButton />
+    </MediaQuery>
   </MapContainer>
 );

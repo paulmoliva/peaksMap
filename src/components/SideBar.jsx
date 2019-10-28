@@ -4,9 +4,16 @@ import { Typography, Tabs, Divider, Spin } from "antd";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 
-const SideBarStyle = styled.div`
-  background: white;
-  /* max-height: ${props => props.maxHeight}; */
+const SideBarContainer = styled.div`
+  right: 0;
+  z-index: 1100;
+  height: 100%;
+`;
+
+const SideBarContent = styled.div`
+  box-sizing: border-box;
+  overflow: auto;
+  height: ${props => props.maxHeight};
 `;
 
 const WelcomeDetailsStyle = styled.div`
@@ -42,17 +49,36 @@ const createTabPane = (subject, key, schoolData, loadingSchool) => {
     school => school.Subject === subject
   );
 
-  let prettySchoolData = subjectGradeData.map(data => (
-    <div>
-      <Paragraph style={{ marginBottom: "200px" }}>
-        Grade {data.grade}:
-      </Paragraph>
-      <Paragraph>
-        <Text strong> {data.NotProficientPercent.split("%")[0]} </Text>
-        <Text>{data.NotProficientPercent.split("%")[1]}</Text>
-      </Paragraph>
-    </div>
-  ));
+  let prettySchoolData = subjectGradeData.map(data => {
+    let percentageFormatted;
+    const percentage = parseInt(data.NotProficientPercent.split("%")[0]);
+
+    if (Number.isInteger(percentage)) {
+      percentageFormatted = `${Math.floor(percentage)}%`;
+    } else {
+      percentageFormatted = "Unknown";
+    }
+    // const percentage = `${Math.floor()}%`;
+    // const proficiencyDescription = data.NotProficientPercent.split("%")[1];
+    const proficiencyDescription = "below proficient";
+
+    const getGradeHeader = grade =>
+      grade === "All Grades" ? (
+        <Paragraph strong>All Grades:</Paragraph>
+      ) : (
+        <Paragraph>Grade {grade}:</Paragraph>
+      );
+
+    return (
+      <div>
+        {getGradeHeader(data.grade)}
+        <Paragraph>
+          <Text strong> {percentageFormatted} </Text>
+          <Text>{proficiencyDescription}</Text>
+        </Paragraph>
+      </div>
+    );
+  });
 
   if (!prettySchoolData.length && !loadingSchool) {
     prettySchoolData = (
@@ -97,17 +123,19 @@ export default ({
   height
 }) => {
   return (
-    <SideBarStyle maxHeight={height}>
-      {selectedSchool ? (
-        <SchoolDetails
-          schoolData={schoolData}
-          loadingSchool={loadingSchool}
-          selectedSchool={selectedSchool}
-          selectedYear={selectedYear}
-        />
-      ) : (
-        <WelcomeDetails />
-      )}
-    </SideBarStyle>
+    <SideBarContainer>
+      <SideBarContent maxHeight={height}>
+        {selectedSchool ? (
+          <SchoolDetails
+            schoolData={schoolData}
+            loadingSchool={loadingSchool}
+            selectedSchool={selectedSchool}
+            selectedYear={selectedYear}
+          />
+        ) : (
+          <WelcomeDetails />
+        )}
+      </SideBarContent>
+    </SideBarContainer>
   );
 };

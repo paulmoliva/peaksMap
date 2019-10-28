@@ -46,14 +46,31 @@ const FilterNav = styled.div`
   padding-left: 70px;
   border-bottom: 1px solid whitesmoke;
   box-shadow: 0 8px 6px -6px black;
+
+  @media (max-width: 768px) {
+    padding-left: 20px;
+  }
   `;
 
 const MainNav = styled(Header)`
-  padding-left: 70px;
-  padding-right: 70px;
+  padding: 0 70px 0 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    padding: 0 20px 0 20px;
+  }
+
+  @media (max-width: 550px) {
+    flex-direction: column-reverse;
+    padding: 10px 20px 10px 20px;
+    height: 100px;
+    justify-content: flex-end;
+    
+    .ant-select {
+      height: 10px;
+    }
+  }
 `;
 
 

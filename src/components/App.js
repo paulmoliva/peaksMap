@@ -9,6 +9,7 @@ import NavBar from "./NavBar";
 import { asdLocations, asdScores } from "../data/asd";
 import { alaskaLocations, alaskaScores } from "../data/alaska";
 import { Icon } from "antd";
+
 const qs = require("qs");
 
 const { Content } = Layout;
@@ -40,7 +41,8 @@ class App extends React.Component {
     selectedYear: "1", // || 1: 2018 - 2: 2017
     selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
     schoolData: [],
-    loadingSchool: false
+    loadingSchool: false,
+    modalOpen: false
   };
 
   onChangeFilter(filter, key) {
@@ -97,13 +99,17 @@ class App extends React.Component {
         theme="twoTone"
         twoToneColor={determineFillColor(marker)}
         // twoToneColor="#eb2f96"
-        onClick={() =>
-          this.setState({ selectedSchool: marker }, () => {
-            this.fetchSchoolData(marker);
-          })
-        }
+        onClick={() => {
+          this.switchSchoolAndFetch(marker);
+        }}
       />
     ));
+  }
+
+  switchSchoolAndFetch(school) {
+    this.setState({ selectedSchool: school, modalOpen: true }, () => {
+      this.fetchSchoolData(school);
+    });
   }
 
   render() {
@@ -129,13 +135,28 @@ class App extends React.Component {
           selectedDataset={this.state.selectedDataset}
           selectedSchool={this.state.selectedSchool}
           onChangeFilter={(filter, key) => this.onChangeFilter(filter, key)}
-          onSelectSchool={school => this.setState({ selectedSchool: school })}
+          onSelectSchool={school => this.switchSchoolAndFetch(school)}
           locationKeys={Object.keys(selectedDistrictCoordinates)}
         />
         {/* https://ant.design/components/modal/ */}
-        {/* <Modal centered visible>
-          <SideBar />
-        </Modal> */}
+        <MediaQuery maxWidth={768}>
+          <Modal
+            centered
+            visible={this.state.modalOpen}
+            footer={null}
+            onCancel={() => {
+              this.setState({ modalOpen: false });
+            }}
+          >
+            <SideBar
+              selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
+              selectedSchool={this.state.selectedSchool}
+              schoolData={this.state.schoolData}
+              loadingSchool={this.state.loadingSchool}
+              height="76vh"
+            />
+          </Modal>
+        </MediaQuery>
         {/* {this.state.selectedSchool} */}
         <Layout>
           {/* <Layout style={{ padding: "0 24px 24px" }}> */}
@@ -148,9 +169,14 @@ class App extends React.Component {
               minHeight: 280
             }}
           >
-            <MapContainer height="76vh">{Markers}</MapContainer>
+            <MapContainer
+              height="85vh"
+              selectedDataset={this.state.selectedDataset}
+            >
+              {Markers}
+            </MapContainer>
 
-            <MediaQuery minWidth={768}>
+            <MediaQuery minWidth={769}>
               <SideBar
                 selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
                 selectedSchool={this.state.selectedSchool}
