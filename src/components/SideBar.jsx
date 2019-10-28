@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Typography, Tabs, Divider, Spin } from "antd";
+import renderEmpty from "antd/lib/config-provider/renderEmpty";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 
@@ -101,13 +102,19 @@ const SchoolDetails = ({
   selectedSchool,
   selectedYear,
   schoolData,
-  loadingSchool
+  loadingSchool,
+  setActiveKey,
+  activeKey
 }) => (
   <WelcomeDetailsStyle>
     <Title>{selectedSchool}</Title>
     <Paragraph> Year: {selectedYear} </Paragraph>
     <Divider />
-    <Tabs animated={false}>
+    <Tabs
+      animated={false}
+      activeKey={activeKey}
+      onTabClick={key => setActiveKey(key)}
+    >
       {createTabPane("ELA", "1", schoolData, loadingSchool)}
       {createTabPane("Math", "2", schoolData, loadingSchool)}
       {createTabPane("Science", "3", schoolData, loadingSchool)}
@@ -115,28 +122,45 @@ const SchoolDetails = ({
   </WelcomeDetailsStyle>
 );
 
-export default ({
-  schoolData,
-  selectedSchool,
-  selectedYear,
-  loadingSchool,
-  height,
-  forceShowWelcome
-}) => {
-  return (
-    <SideBarContainer>
-      <SideBarContent maxHeight={height}>
-        {selectedSchool && !forceShowWelcome ? (
-          <SchoolDetails
-            schoolData={schoolData}
-            loadingSchool={loadingSchool}
-            selectedSchool={selectedSchool}
-            selectedYear={selectedYear}
-          />
-        ) : (
-          <WelcomeDetails />
-        )}
-      </SideBarContent>
-    </SideBarContainer>
-  );
-};
+export default class extends React.Component {
+  state = {
+    activeKey: "1"
+  };
+
+  componentDidUpdate(prevProps) {
+    const prevSchool = prevProps.selectedSchool;
+    const { selectedSchool } = this.props;
+    if (selectedSchool !== prevSchool) {
+      this.setState({ activeKey: "1" });
+    }
+  }
+
+  render() {
+    const {
+      schoolData,
+      selectedSchool,
+      selectedYear,
+      loadingSchool,
+      height,
+      forceShowWelcome
+    } = this.props;
+    return (
+      <SideBarContainer>
+        <SideBarContent maxHeight={height}>
+          {selectedSchool && !forceShowWelcome ? (
+            <SchoolDetails
+              schoolData={schoolData}
+              loadingSchool={loadingSchool}
+              selectedSchool={selectedSchool}
+              selectedYear={selectedYear}
+              setActiveKey={activeKey => this.setState({ activeKey })}
+              activeKey={this.state.activeKey}
+            />
+          ) : (
+            <WelcomeDetails />
+          )}
+        </SideBarContent>
+      </SideBarContainer>
+    );
+  }
+}
