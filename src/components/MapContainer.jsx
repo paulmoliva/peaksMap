@@ -55,15 +55,32 @@ const LegendItem = ({ initialRange, finalRange }) => {
   );
 };
 
-let HelpButton = () => <Icon type="home" />;
-
-HelpButton = styled(HelpButton)`
+const HelpButtonStyle = styled.div`
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 120px;
+  right: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
-export default ({ children, height, selectedDataSet }) => (
+const HelpButton = ({ openModal }) => (
+  <HelpButtonStyle
+    className="HelpButton"
+    onClick={() => {
+      openModal();
+    }}
+  >
+    <Icon
+      type="question-circle"
+      theme="twoTone"
+      twoToneColor="#52c41a"
+      style={{ fontSize: "40px" }}
+    />
+  </HelpButtonStyle>
+);
+
+export default ({ children, height, selectedDataSet, openModal }) => (
   <MapContainer>
     <Map height={height} zoom={selectedDataSet === "2" ? 5 : 11}>
       {children}
@@ -74,7 +91,7 @@ export default ({ children, height, selectedDataSet }) => (
       <LegendItem initialRange={51} finalRange={100}></LegendItem>
     </Legend>
     <MediaQuery maxWidth={768}>
-      <HelpButton />
+      <HelpButton openModal={openModal} />
     </MediaQuery>
   </MapContainer>
 );

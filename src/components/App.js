@@ -42,7 +42,8 @@ class App extends React.Component {
     selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
     schoolData: [],
     loadingSchool: false,
-    modalOpen: false
+    modalOpen: false,
+    forceShowWelcome: false
   };
 
   onChangeFilter(filter, key) {
@@ -146,25 +147,28 @@ class App extends React.Component {
             footer={null}
             onCancel={() => {
               this.setState({ modalOpen: false });
+              // add a timeout so that the screen doesn't flicker when switching from welcome page
+              // to school data
+              setTimeout(() => {
+                this.setState({ forceShowWelcome: false });
+              }, 200);
             }}
           >
             <SideBar
               selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
               selectedSchool={this.state.selectedSchool}
+              forceShowWelcome={this.state.forceShowWelcome}
               schoolData={this.state.schoolData}
               loadingSchool={this.state.loadingSchool}
               height="76vh"
             />
           </Modal>
         </MediaQuery>
-        {/* {this.state.selectedSchool} */}
         <Layout>
-          {/* <Layout style={{ padding: "0 24px 24px" }}> */}
           <ContentGrid
             className="ContentGrid"
             style={{
               background: "#fff",
-              // padding: 24,
               margin: 0,
               minHeight: 280
             }}
@@ -172,6 +176,9 @@ class App extends React.Component {
             <MapContainer
               height="85vh"
               selectedDataset={this.state.selectedDataset}
+              openModal={() =>
+                this.setState({ modalOpen: true, forceShowWelcome: true })
+              }
             >
               {Markers}
             </MapContainer>
@@ -186,7 +193,6 @@ class App extends React.Component {
               />
             </MediaQuery>
           </ContentGrid>
-          {/* </Layout> */}
         </Layout>
       </Layout>
     );

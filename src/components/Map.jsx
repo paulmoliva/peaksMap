@@ -1,6 +1,22 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
+import styled from 'styled-components';
 import { Icon } from "antd";
+
+const Map = styled.div`
+  /* overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+
+  iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  } */
+`;
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -22,7 +38,7 @@ class SimpleMap extends Component {
     return (
       // TODO: ZOOM IS NOT FUCKING UPDATING
       // Important! Always set the container height explicitly
-      <div style={{ height, width: "100%" }}>
+      <Map style={{ height, width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE" }}
           defaultCenter={this.props.center}
@@ -36,7 +52,7 @@ class SimpleMap extends Component {
         >
           {children}
         </GoogleMapReact>
-      </div>
+      </Map>
     );
   }
 }

@@ -73,6 +73,20 @@ const MainNav = styled(Header)`
   }
 `;
 
+const LogoWrapperStyle = styled.div`
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 550px) {
+    padding-bottom: 10px;
+  }
+`;
+
+const LogoWrapper = () => (
+  <LogoWrapperStyle>
+    <Logo />
+  </LogoWrapperStyle>
+)
 
 
 export default ({
@@ -98,8 +112,7 @@ export default ({
           suffix={<Icon type="search" className="certain-category-icon" />}
         />
       </AutoComplete>
-      <Logo />
-      {/* <div className="logo" /> */}
+      <LogoWrapper />
     </MainNav>
     <FilterNav className="FilterNav">
       <div className="filters-container">

@@ -120,12 +120,13 @@ export default ({
   selectedSchool,
   selectedYear,
   loadingSchool,
-  height
+  height,
+  forceShowWelcome
 }) => {
   return (
     <SideBarContainer>
       <SideBarContent maxHeight={height}>
-        {selectedSchool ? (
+        {selectedSchool && !forceShowWelcome ? (
           <SchoolDetails
             schoolData={schoolData}
             loadingSchool={loadingSchool}
