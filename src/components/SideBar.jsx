@@ -59,8 +59,7 @@ const createTabPane = (subject, key, schoolData, loadingSchool) => {
     } else {
       percentageFormatted = "Unknown";
     }
-    // const percentage = `${Math.floor()}%`;
-    // const proficiencyDescription = data.NotProficientPercent.split("%")[1];
+    
     const proficiencyDescription = "below proficient";
 
     const getGradeHeader = grade =>

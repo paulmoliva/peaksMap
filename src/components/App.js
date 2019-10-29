@@ -8,6 +8,7 @@ import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
 import { asdLocations, asdScores } from "../data/asd";
 import { alaskaLocations, alaskaScores } from "../data/alaska";
+import { COLORS } from "../data/constants";
 import { Icon } from "antd";
 
 const qs = require("qs");
@@ -72,41 +73,6 @@ class App extends React.Component {
     this.setState({ schoolData, loadingSchool: false });
   }
 
-  makeMarkers(selectedDistrictCoordinates, selectedScores) {
-    const determineFillColor = marker => {
-      const currentScores = selectedScores[marker];
-      if (!currentScores) {
-        return "white";
-      } else {
-        const averageScore =
-          (parseInt(currentScores["Math"]) + parseInt(currentScores["ELA"])) /
-          2;
-
-        if (averageScore < 31) {
-          return "green";
-        } else if (averageScore < 51) {
-          return "yellow";
-        } else {
-          return "red";
-        }
-      }
-    };
-
-    return Object.keys(selectedDistrictCoordinates).map(marker => (
-      <Icon
-        lat={selectedDistrictCoordinates[marker].lat}
-        lng={selectedDistrictCoordinates[marker].lng}
-        type="home"
-        theme="twoTone"
-        twoToneColor={determineFillColor(marker)}
-        // twoToneColor="#eb2f96"
-        onClick={() => {
-          this.switchSchoolAndFetch(marker);
-        }}
-      />
-    ));
-  }
-
   switchSchoolAndFetch(school) {
     this.setState({ selectedSchool: school, modalOpen: true }, () => {
       this.fetchSchoolData(school);
@@ -121,13 +87,9 @@ class App extends React.Component {
         ? locationCoordinates.asd
         : locationCoordinates.alaska;
 
-    // const selectedScores = selectedDataset === "1" ? scores.asd : scores.alaska;
     const selectedScores = scores.asd;
 
-    const Markers = this.makeMarkers(
-      selectedDistrictCoordinates,
-      selectedScores
-    );
+    const selectedSchoolCoordinates = selectedDistrictCoordinates[this.state.selectedSchool];
 
     return (
       <Layout>
@@ -175,13 +137,17 @@ class App extends React.Component {
           >
             <MapContainer
               height="85vh"
+              selectedScores={selectedScores}
+              selectedDistrictCoordinates={selectedDistrictCoordinates}
+              switchSchoolAndFetch={(school) => this.switchSchoolAndFetch(school)}
               selectedDataset={this.state.selectedDataset}
+              selectedSchoolCoordinates={selectedSchoolCoordinates}
               openModal={() =>
                 this.setState({ modalOpen: true, forceShowWelcome: true })
               }
-            >
-              {Markers}
-            </MapContainer>
+            />
+              {/* {Markers}
+            </MapContainer> */}
 
             <MediaQuery minWidth={769}>
               <SideBar

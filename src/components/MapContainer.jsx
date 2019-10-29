@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Typography, Icon } from "antd";
 import MediaQuery from "react-responsive";
-
+import { COLORS } from "../data/constants";
 import Map from "./Map";
 
 const { Title, Paragraph } = Typography;
@@ -38,11 +38,11 @@ const LegendItemStyle = styled.div`
 const LegendItem = ({ initialRange, finalRange }) => {
   let color;
   if (initialRange === 0) {
-    color = "#25B46F";
+    color = COLORS.GREEN;
   } else if (initialRange === 31) {
-    color = "#C2B00C";
+    color = COLORS.YELLOW;
   } else {
-    color = "#931A1A";
+    color = COLORS.RED;
   }
 
   return (
@@ -80,9 +80,26 @@ const HelpButton = ({ openModal }) => (
   </HelpButtonStyle>
 );
 
-export default ({ children, height, selectedDataSet, openModal }) => (
+export default ({
+  children,
+  height,
+  selectedDataSet,
+  openModal,
+  selectedDataset,
+  selectedScores,
+  selectedDistrictCoordinates,
+  switchSchoolAndFetch,
+  selectedSchoolCoordinates
+}) => (
   <MapContainer>
-    <Map height={height} zoom={selectedDataSet === "2" ? 5 : 11}>
+    <Map
+      height={height}
+      selectedDataset={selectedDataset}
+      selectedDistrictCoordinates={selectedDistrictCoordinates}
+      selectedScores={selectedScores}
+      switchSchoolAndFetch={switchSchoolAndFetch}
+      selectedSchoolCoordinates={selectedSchoolCoordinates}
+    >
       {children}
     </Map>
     <Legend className="Legend">
