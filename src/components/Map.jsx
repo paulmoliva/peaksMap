@@ -1,15 +1,55 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import GoogleMapReact from "google-map-react";
 import styled from "styled-components";
 import { Icon } from "antd";
 import { COLORS } from "../data/constants";
-import { tsObjectKeyword } from "@babel/types";
 
 const Map = styled.div``;
 
 const ALASKA_CENTER = {
   lat: 61.19,
   lng: -149.93
+};
+
+// InfoWindow component
+const InfoWindow = props => {
+  const { place } = props;
+  const infoWindowStyle = {
+    position: "relative",
+    bottom: 0,
+    left: "0px",
+    width: 220,
+    backgroundColor: "white",
+    boxShadow: "0 2px 7px 1px rgba(0, 0, 0, 0.3)",
+    padding: 10,
+    fontSize: 14,
+    zIndex: 100
+  };
+
+  return (
+    <div style={infoWindowStyle}>
+      <div style={{ fontSize: 16 }}>{place.name}</div>
+    </div>
+  );
+};
+
+const Marker = props => {
+  const markerStyle = {
+    border: "1px solid white",
+    borderRadius: "50%",
+    height: 10,
+    width: 10,
+    backgroundColor: props.show ? "red" : "blue",
+    cursor: "pointer",
+    zIndex: 10
+  };
+
+  return (
+    <Fragment>
+      <div style={markerStyle} />
+      {props.show && <InfoWindow place={props.place} />}
+    </Fragment>
+  );
 };
 
 class SimpleMap extends Component {
@@ -28,35 +68,37 @@ class SimpleMap extends Component {
     openWindow: null
   };
 
+  componentWillMount() {
+    this.asdMarkers = null;
+    this.alaskaMarkers = null;
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.selectedDataset !== this.props.selectedDataset) {
       if (this.state.openWindow) {
         this.state.openWindow.close();
       }
-
-      if (this.props.selectedDataset === "1") {
-        this.setZoom(11);
-        this.setGlobalCenter();
-      } else {
-        this.setZoom(4);
-        this.setGlobalCenter();
-      }
+      this.updateMarkers();
+      // if (this.props.selectedDataset === "1") {
+      //   this.setZoom(11);
+      //   this.setGlobalCenter();
+      // } else {
+      //   this.setZoom(4);
+      //   this.setGlobalCenter();
+      // }
     }
-
-    if (
-      prevProps.selectedSchoolCoordinates !==
-      this.props.selectedSchoolCoordinates
-    ) {
-      if (!this.props.selectedSchoolCoordinates) {
-        debugger;
-        return;
-      }
-
-      const { lat, lng } = this.props.selectedSchoolCoordinates;
-      const center = new window.g_maps.LatLng(lat, lng);
-      window.g_map.panTo(center);
-      // this.setZoom(8);
-    }
+    // if (
+    //   prevProps.selectedSchoolCoordinates !==
+    //   this.props.selectedSchoolCoordinates
+    // ) {
+    //   if (!this.props.selectedSchoolCoordinates) {
+    //     debugger;
+    //     return;
+    //   }
+    //   const { lat, lng } = this.props.selectedSchoolCoordinates;
+    //   const center = new window.g_maps.LatLng(lat, lng);
+    //   window.g_map.panTo(center);
+    // }
   }
 
   setGlobalCenter(lat = ALASKA_CENTER.lat, lng = ALASKA_CENTER.lng) {
@@ -163,8 +205,82 @@ class SimpleMap extends Component {
 
     this.setState({ markers: finalMarkers });
   }
+
+  getMapBounds = (map, maps, places) => {
+    const bounds = new maps.LatLngBounds();
+
+    places.forEach(place => {
+      bounds.extend(new maps.LatLng(place.props.lat, place.props.lng));
+    });
+    return bounds;
+  };
+
+  apiIsLoaded = (map, maps, places) => {
+    // Get bounds by our places
+    const bounds = this.getMapBounds(map, maps, places);
+    // Fit map to bounds
+    map.fitBounds(bounds);
+    // Bind the resize listener
+    this.bindResizeListener(map, maps, bounds);
+  };
+
+  bindResizeListener = (map, maps, bounds) => {
+    maps.event.addDomListenerOnce(map, "idle", () => {
+      maps.event.addDomListener(window, "resize", () => {
+        map.fitBounds(bounds);
+      });
+    });
+  };
+
+  onChildClickCallback(key) {
+    this.props.toggleShowInfo(key);
+    // this.setState(state => {
+    //   const index = state.places.findIndex(e => e.name === key);
+    //   state.places[index].show = !state.places[index].show; // eslint-disable-line no-param-reassign
+    //   return { places: state.places };
+    // });
+  }
+
+  updateMarkers(cb = () => {}) {
+    const { selectedDistrictCoordinates } = this.props;
+    const preLoadedmarkers =
+      this.props.selectedDataset === "1" ? this.asdMarkers : this.alaskaMarkers;
+
+    const finalMarkers = preLoadedmarkers
+      ? preLoadedmarkers
+      : Object.keys(selectedDistrictCoordinates).map(marker => {
+          return (
+            <Icon
+              type="home"
+              key={marker}
+              text={marker}
+              lat={selectedDistrictCoordinates[marker].lat}
+              lng={selectedDistrictCoordinates[marker].lng}
+              onClick={() => {
+                this.props.switchSchoolAndFetch(marker);
+              }}
+            />
+          );
+        });
+
+    if (this.props.selectedDataset === "1") {
+      this.asdMarkers = finalMarkers;
+    } else {
+      this.alaskaMarkers = finalMarkers;
+    }
+
+    this.setState({ markers: finalMarkers }, () => cb(finalMarkers));
+  }
+
   render() {
-    const { height, zoom } = this.props;
+    const { height, zoom, places } = this.props;
+
+    let selectedPlaces;
+    if (this.props.selectedDataset === "1") {
+      selectedPlaces = places.asd;
+    } else {
+      selectedPlaces = places.alaska;
+    }
 
     return (
       // TODO: ZOOM IS NOT FUCKING UPDATING
@@ -175,9 +291,13 @@ class SimpleMap extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
           zoom={zoom}
+          onChildClick={key => this.onChildClickCallback(key)}
           onGoogleApiLoaded={({ map, maps }) => {
             this.setState({ map, maps, loadedMaps: true }, () => {
-              this.makeMarkers(map, maps);
+              // this.updateMarkers(markers => {
+              //   this.apiIsLoaded(map, maps, markers);
+              // });
+              // this.makeMarkers(map, maps);
             });
 
             window.g_map = map;
@@ -186,6 +306,15 @@ class SimpleMap extends Component {
           }}
           yesIWantToUseGoogleMapApiInternals
         >
+          {selectedPlaces.map(place => (
+            <Marker
+              key={place.name}
+              lat={place.lat}
+              lng={place.lng}
+              show={place.show}
+              place={place}
+            />
+          ))}
           {/* {this.state.markers} */}
         </GoogleMapReact>
       </Map>

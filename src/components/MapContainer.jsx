@@ -89,7 +89,9 @@ export default ({
   selectedScores,
   selectedDistrictCoordinates,
   switchSchoolAndFetch,
-  selectedSchoolCoordinates
+  selectedSchoolCoordinates,
+  places,
+  toggleShowInfo
 }) => (
   <MapContainer>
     <Map
@@ -99,6 +101,8 @@ export default ({
       selectedScores={selectedScores}
       switchSchoolAndFetch={switchSchoolAndFetch}
       selectedSchoolCoordinates={selectedSchoolCoordinates}
+      places={places}
+      toggleShowInfo={toggleShowInfo}
     >
       {children}
     </Map>

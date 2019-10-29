@@ -3,13 +3,13 @@ import "../App.less";
 import { Layout, Modal } from "antd";
 import styled from "styled-components";
 import MediaQuery from "react-responsive";
+import { addUrlProps, UrlQueryParamTypes } from "react-url-query";
+
 import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
 import { asdLocations, asdScores } from "../data/asd";
 import { alaskaLocations, alaskaScores } from "../data/alaska";
-import { COLORS } from "../data/constants";
-import { Icon } from "antd";
 
 const qs = require("qs");
 
@@ -36,7 +36,12 @@ const scores = {
   alaska: alaskaScores
 };
 
-class App extends React.Component {
+const urlPropsQueryConfig = {
+  bar: { type: UrlQueryParamTypes.string },
+  foo: { type: UrlQueryParamTypes.number, queryParam: "fooInUrl" }
+};
+
+class App extends React.PureComponent {
   state = {
     selectedSchool: null,
     selectedYear: "1", // || 1: 2018 - 2: 2017
@@ -44,8 +49,37 @@ class App extends React.Component {
     schoolData: [],
     loadingSchool: false,
     modalOpen: false,
-    forceShowWelcome: false
+    forceShowWelcome: false,
+    places: {
+      asd: [],
+      alaska: []
+    }
   };
+
+  static defaultProps = {
+    foo: 123,
+    bar: "bar"
+  };
+
+  componentDidMount() {
+    const formattedAsdPlaces = Object.keys(asdLocations).map(place => ({
+      name: place,
+      lat: asdLocations[place].lat,
+      lng: asdLocations[place].lng,
+      show: false
+    }));
+
+    const formattedAlaskaPlaces = Object.keys(alaskaLocations).map(place => ({
+      name: place,
+      lat: alaskaLocations[place].lat,
+      lng: alaskaLocations[place].lng,
+      show: false
+    }));
+
+    this.setState({
+      places: { alaska: formattedAlaskaPlaces, asd: formattedAsdPlaces }
+    });
+  }
 
   onChangeFilter(filter, key) {
     if (filter === "year") {
@@ -79,8 +113,26 @@ class App extends React.Component {
     });
   }
 
+  toggleShowInfo(key) {
+    this.setState(state => {
+      const selectedPlace =
+        this.state.selectedDataset === "1"
+          ? this.state.places.asd
+          : this.state.places.alaska;
+
+      const index = selectedPlace.findIndex(e => e.name === key);
+      debugger;
+      selectedPlace[index].show = !selectedPlace[index].show; // eslint-disable-line no-param-reassign
+      if (this.state.selectedDataset === "1") {
+        return { places: { ...this.state.places, asd: selectedPlace } };
+      } else {
+        return { places: { ...this.state.places, alaska: selectedPlace } };
+      }
+    });
+  }
+
   render() {
-    const { selectedDataset } = this.state;
+    const { selectedDataset, places } = this.state;
 
     const selectedDistrictCoordinates =
       selectedDataset === "1"
@@ -89,7 +141,18 @@ class App extends React.Component {
 
     const selectedScores = scores.asd;
 
-    const selectedSchoolCoordinates = selectedDistrictCoordinates[this.state.selectedSchool];
+    const selectedSchoolCoordinates =
+      selectedDistrictCoordinates[this.state.selectedSchool];
+
+    const {
+      foo,
+      bar,
+      onChangeFoo,
+      onChangeBar,
+      onChangeUrlQueryParams
+    } = this.props;
+
+    console.log(bar);
 
     return (
       <Layout>
@@ -137,16 +200,18 @@ class App extends React.Component {
           >
             <MapContainer
               height="85vh"
+              places={places}
               selectedScores={selectedScores}
               selectedDistrictCoordinates={selectedDistrictCoordinates}
-              switchSchoolAndFetch={(school) => this.switchSchoolAndFetch(school)}
+              switchSchoolAndFetch={school => this.switchSchoolAndFetch(school)}
               selectedDataset={this.state.selectedDataset}
               selectedSchoolCoordinates={selectedSchoolCoordinates}
+              toggleShowInfo={key => this.toggleShowInfo(key)}
               openModal={() =>
                 this.setState({ modalOpen: true, forceShowWelcome: true })
               }
             />
-              {/* {Markers}
+            {/* {Markers}
             </MapContainer> */}
 
             <MediaQuery minWidth={769}>
@@ -165,4 +230,6 @@ class App extends React.Component {
   }
 }
 
-export default App;
+// export default App;
+
+export default addUrlProps({ urlPropsQueryConfig })(App);
