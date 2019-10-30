@@ -256,7 +256,7 @@ class App extends React.PureComponent {
             }}
           >
             <MapContainer
-              height={window.innerHeight < 768 ? "74vh" : "85vh"}
+              height={window.innerHeight < 768 ? "72vh" : "85vh"}
               places={places}
               selectedPlaces={this.getSelectedPlaces()}
               selectedScores={selectedScores}
