@@ -5,14 +5,15 @@ import Logo from './Logo';
 
 const { Header } = Layout;
 
-const districtMenu = (selectedDataset, onChangeDataset) => (
+const districtMenu = (selectedDatasetKey, onChangeDataset) => (
   <Menu
     theme="light"
     mode="horizontal"
-    selectedKeys={[selectedDataset]}
+    selectedKeys={[selectedDatasetKey]}
     style={{ lineHeight: "64px" }}
     onClick={info => {
-      onChangeDataset(info.key);
+      const newDataset = info.key === '1' ? 'asd' : 'statewide';
+      onChangeDataset(newDataset);
     }}
   >
     <Menu.Item key="1">Anchorage School District</Menu.Item>
@@ -91,7 +92,7 @@ const LogoWrapper = () => (
 
 export default ({
   selectedYear,
-  selectedDataset,
+  selectedDatasetKey,
   onChangeFilter,
   onSelectSchool,
   locationKeys
@@ -121,7 +122,7 @@ export default ({
           style={{ marginRight: "10px", display: "inline" }}
         >
           <Dropdown
-            overlay={districtMenu(selectedDataset, key => {
+            overlay={districtMenu(selectedDatasetKey, key => {
               onChangeFilter("dataset", key);
             })}
             trigger={["click"]}

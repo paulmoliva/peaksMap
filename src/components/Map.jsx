@@ -34,7 +34,7 @@ class SimpleMap extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.selectedDataset !== this.props.selectedDataset) {
       if (this.state.apiIsLoaded) {
-        this.fitBounds(window.g_map, window.g_maps, this.props.selectedPlaces);
+        // this.fitBounds(window.g_map, window.g_maps, this.props.selectedPlaces);
       } 
     }
     if (

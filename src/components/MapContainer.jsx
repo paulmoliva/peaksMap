@@ -83,7 +83,6 @@ const HelpButton = ({ openModal }) => (
 export default ({
   children,
   height,
-  selectedDataSet,
   openModal,
   selectedDataset,
   selectedScores,

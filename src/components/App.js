@@ -39,15 +39,15 @@ const scores = {
 };
 
 const urlPropsQueryConfig = {
-  bar: { type: UrlQueryParamTypes.string },
-  foo: { type: UrlQueryParamTypes.number, queryParam: "fooInUrl" }
+  selectedYear: { type: UrlQueryParamTypes.string, queryParam: "year" },
+  selectedDataset: { type: UrlQueryParamTypes.string, queryParam: "dataset" }
 };
 
 class App extends React.PureComponent {
   state = Object.freeze({
     selectedSchool: null,
-    selectedYear: "1", // || 1: 2018 - 2: 2017
-    selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
+    // selectedYear: "1", // || 1: 2018 - 2: 2017
+    // selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
     schoolData: [],
     loadingSchool: false,
     modalOpen: false,
@@ -59,8 +59,8 @@ class App extends React.PureComponent {
   });
 
   static defaultProps = {
-    foo: 123,
-    bar: "bar"
+    selectedYear: "1",
+    selectedDataset: "asd"
   };
 
   componentDidMount() {
@@ -84,30 +84,48 @@ class App extends React.PureComponent {
   }
 
   onChangeFilter(filter, key) {
+    const { onChangeUrlQueryParams } = this.props;
     if (filter === "year") {
-      this.setState({ selectedYear: key }, () => {
-        this.fetchSchoolData();
+      onChangeUrlQueryParams({
+        selectedYear: key
       });
+      this.fetchSchoolData(key);
+      // this.setState({ selectedYear: key }, () => {
+      // });
     } else {
       // switch district
-      this.setState({ selectedDataset: key }, () => {
-        // this sets all .show values to false
-        this.closeAllInfowindows();
+      onChangeUrlQueryParams({
+        selectedDataset: key
       });
+
+      this.closeAllInfowindows(key);
+      // this.setState({ selectedDataset: key }, () => {
+      //   // this sets all .show values to false
+      //   this.closeAllInfowindows();
+      // });
     }
   }
 
-  closeAllInfowindows() {
+  getSelectedDatasetKey() {
+    return this.props.selectedDataset === 'asd' ? "1"  : "2";
+  }
+
+  getSelectedYearKey() {
+    return this.props.selectedYear === 2018 ? "1" : "2";
+  }
+
+  // TODO: UPDATE THIS BROKEN SHIT
+  closeAllInfowindows(selectedDataset) {
     this.setState(state => {
       // get the old open one too
 
-      const selectedPlaces = this.getSelectedPlaces();
+      const selectedPlaces = this.getSelectedPlaces(selectedDataset);
       const showResetPlaces = selectedPlaces.map(place => ({
         ...place,
         show: false
       }));
 
-      if (this.state.selectedDataset === "1") {
+      if (selectedDataset === "asd") {
         return { places: { ...this.state.places, asd: showResetPlaces } };
       } else {
         return { places: { ...this.state.places, alaska: showResetPlaces } };
@@ -115,11 +133,15 @@ class App extends React.PureComponent {
     });
   }
 
-  async fetchSchoolData() {
+  async fetchSchoolData(barelyUpdatedYear) {
     // http://payroll.alaskapolicyforum.net/peaks/?school_name=Susitna%20Elementary&year=2018
 
-    const { selectedSchool, selectedYear } = this.state;
-    const year = selectedYear === "1" ? 2018 : 2017;
+    const { selectedYear } = this.props;
+    const { selectedSchool } = this.state;
+    let yearKey = barelyUpdatedYear ? barelyUpdatedYear : selectedYear;
+    console.log(yearKey);
+
+    const year = yearKey === "1" ? 2018 : 2017;
     const queryStr = qs.stringify({ school_name: selectedSchool, year });
     const urlStr = `${BASE_API_URL}${queryStr}`;
 
@@ -131,14 +153,19 @@ class App extends React.PureComponent {
 
   switchSchoolAndFetch(school) {
     this.setState({ selectedSchool: school, modalOpen: true }, () => {
-      this.fetchSchoolData(school);
+      this.fetchSchoolData();
     });
   }
 
-  getSelectedPlaces() {
-    const { places, selectedDataset } = this.state;
+  getSelectedPlaces(barelyUpdatedDataSet) {
+    const { places } = this.state;
+    const { selectedDataset } = this.props;
+    const finalDataset = barelyUpdatedDataSet
+      ? barelyUpdatedDataSet
+      : selectedDataset;
 
-    if (selectedDataset === "1") {
+      console.log(finalDataset);
+    if (finalDataset === "asd") {
       return places.asd;
     } else {
       return places.alaska;
@@ -160,7 +187,7 @@ class App extends React.PureComponent {
         selectedPlaces[lastOpenIndex].show = false;
       }
 
-      if (this.state.selectedDataset === "1") {
+      if (this.props.selectedDataset === "asd") {
         return { places: { ...this.state.places, asd: selectedPlaces } };
       } else {
         return { places: { ...this.state.places, alaska: selectedPlaces } };
@@ -169,10 +196,12 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { selectedDataset, places } = this.state;
+    const { places } = this.state;
+
+    const { selectedDataset } = this.props;
 
     const selectedDistrictCoordinates =
-      selectedDataset === "1"
+      selectedDataset === "asd"
         ? locationCoordinates.asd
         : locationCoordinates.alaska;
 
@@ -181,21 +210,13 @@ class App extends React.PureComponent {
     const selectedSchoolCoordinates =
       selectedDistrictCoordinates[this.state.selectedSchool];
 
-    const {
-      foo,
-      bar,
-      onChangeFoo,
-      onChangeBar,
-      onChangeUrlQueryParams
-    } = this.props;
-
-    // console.log(bar);
+    const selectedDatasetKey = this.getSelectedDatasetKey();
 
     return (
       <Layout>
         <NavBar
-          selectedYear={this.state.selectedYear}
-          selectedDataset={this.state.selectedDataset}
+          selectedYear={this.props.selectedYear}
+          selectedDatasetKey={selectedDatasetKey}
           selectedSchool={this.state.selectedSchool}
           onChangeFilter={(filter, key) => this.onChangeFilter(filter, key)}
           onSelectSchool={school => {
@@ -220,7 +241,7 @@ class App extends React.PureComponent {
             }}
           >
             <SideBar
-              selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
+              selectedYear={this.props.selectedYear === "1" ? 2018 : 2017}
               selectedSchool={this.state.selectedSchool}
               forceShowWelcome={this.state.forceShowWelcome}
               schoolData={this.state.schoolData}
@@ -245,19 +266,17 @@ class App extends React.PureComponent {
               selectedScores={selectedScores}
               selectedDistrictCoordinates={selectedDistrictCoordinates}
               switchSchoolAndFetch={school => this.switchSchoolAndFetch(school)}
-              selectedDataset={this.state.selectedDataset}
+              selectedDatasetKey={selectedDatasetKey}
               selectedSchoolCoordinates={selectedSchoolCoordinates}
               toggleShowInfo={key => this.toggleShowInfo(key)}
               openModal={() =>
                 this.setState({ modalOpen: true, forceShowWelcome: true })
               }
             />
-            {/* {Markers}
-            </MapContainer> */}
 
             <MediaQuery minWidth={769}>
               <SideBar
-                selectedYear={this.state.selectedYear === "1" ? 2018 : 2017}
+                selectedYear={this.props.selectedYear === "1" ? 2018 : 2017}
                 selectedSchool={this.state.selectedSchool}
                 schoolData={this.state.schoolData}
                 loadingSchool={this.state.loadingSchool}
