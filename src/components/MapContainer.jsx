@@ -105,11 +105,13 @@ export default ({
       toggleShowInfo={toggleShowInfo}
       selectedPlaces={selectedPlaces}
     />
-    <Legend className="Legend">
-      <LegendItem initialRange={0} finalRange={30}></LegendItem>
-      <LegendItem initialRange={31} finalRange={50}></LegendItem>
-      <LegendItem initialRange={51} finalRange={100}></LegendItem>
-    </Legend>
+    <MediaQuery minWidth={768}>
+        <Legend className="Legend">
+          <LegendItem initialRange={0} finalRange={30}></LegendItem>
+          <LegendItem initialRange={31} finalRange={50}></LegendItem>
+          <LegendItem initialRange={51} finalRange={100}></LegendItem>
+        </Legend>
+    </MediaQuery>
     <MediaQuery maxWidth={768}>
       <HelpButton openModal={openModal} />
     </MediaQuery>

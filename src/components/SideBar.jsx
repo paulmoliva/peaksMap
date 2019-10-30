@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Typography, Tabs, Divider, Spin } from "antd";
+import MediaQuery from "react-responsive";
+import {COLORS} from "../data/constants";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 
@@ -20,6 +22,51 @@ const WelcomeDetailsStyle = styled.div`
   padding: 5px;
 `;
 
+const Legend = styled.div`
+  width: 300px;
+  height: 200px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(121, 121, 121, 0.66);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const LegendItemStyle = styled.div`
+  color: white;
+  display: flex;
+  padding-left: 20px;
+`;
+
+const ColorSquare = styled.div`
+  background: ${props => props.color};
+  width: 30px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const LegendItem = ({ initialRange, finalRange }) => {
+    let color;
+    if (initialRange === 0) {
+        color = COLORS.GREEN;
+    } else if (initialRange === 31) {
+        color = COLORS.YELLOW;
+    } else {
+        color = COLORS.RED;
+    }
+
+    return (
+        <LegendItemStyle className="LegendItemStyle">
+            <ColorSquare color={color} className="ColorSquare" />
+            <Paragraph style={{ color: "black" }}>
+                {initialRange}% - {finalRange}% below proficiency
+            </Paragraph>
+        </LegendItemStyle>
+    );
+};
+
 const WelcomeDetails = () => (
   <WelcomeDetailsStyle>
     <Title>PEAKS Data Map</Title>
@@ -35,6 +82,11 @@ const WelcomeDetails = () => (
       Alternatively, type a school name into the search bar and select the
       corresponding search result.
     </Paragraph>
+    <MediaQuery maxWidth={768}>
+        <LegendItem initialRange={0} finalRange={30}>Below 50%</LegendItem>
+        <LegendItem initialRange={31} finalRange={50}></LegendItem>
+        <LegendItem initialRange={51} finalRange={100}></LegendItem>
+    </MediaQuery>
   </WelcomeDetailsStyle>
 );
 
