@@ -39,7 +39,7 @@ const scores = {
 };
 
 const urlPropsQueryConfig = {
-  selectedYear: { type: UrlQueryParamTypes.string, queryParam: "year" },
+  selectedYear: { type: UrlQueryParamTypes.number, queryParam: "year" },
   selectedDataset: { type: UrlQueryParamTypes.string, queryParam: "dataset" }
 };
 
@@ -59,7 +59,7 @@ class App extends React.PureComponent {
   });
 
   static defaultProps = {
-    selectedYear: "1",
+    selectedYear: 2018,
     selectedDataset: "asd"
   };
 
@@ -100,7 +100,6 @@ class App extends React.PureComponent {
 
       this.closeAllInfowindows(key);
       // this.setState({ selectedDataset: key }, () => {
-      //   // this sets all .show values to false
       //   this.closeAllInfowindows();
       // });
     }
@@ -138,10 +137,11 @@ class App extends React.PureComponent {
 
     const { selectedYear } = this.props;
     const { selectedSchool } = this.state;
-    let yearKey = barelyUpdatedYear ? barelyUpdatedYear : selectedYear;
-    console.log(yearKey);
+    const year = barelyUpdatedYear ? barelyUpdatedYear : selectedYear;
+    // console.log(yearKey);
 
-    const year = yearKey === "1" ? 2018 : 2017;
+    // const year = yearKey === "1" ? 2018 : 2017;
+    // const year = yearKey === "1" ? 2018 : 2017;
     const queryStr = qs.stringify({ school_name: selectedSchool, year });
     const urlStr = `${BASE_API_URL}${queryStr}`;
 
@@ -215,7 +215,7 @@ class App extends React.PureComponent {
     return (
       <Layout>
         <NavBar
-          selectedYear={this.props.selectedYear}
+          selectedYear={this.getSelectedYearKey()}
           selectedDatasetKey={selectedDatasetKey}
           selectedSchool={this.state.selectedSchool}
           onChangeFilter={(filter, key) => this.onChangeFilter(filter, key)}
@@ -241,7 +241,7 @@ class App extends React.PureComponent {
             }}
           >
             <SideBar
-              selectedYear={this.props.selectedYear === "1" ? 2018 : 2017}
+              selectedYear={this.props.selectedYear}
               selectedSchool={this.state.selectedSchool}
               forceShowWelcome={this.state.forceShowWelcome}
               schoolData={this.state.schoolData}
@@ -276,7 +276,7 @@ class App extends React.PureComponent {
 
             <MediaQuery minWidth={769}>
               <SideBar
-                selectedYear={this.props.selectedYear === "1" ? 2018 : 2017}
+                selectedYear={this.props.selectedYear}
                 selectedSchool={this.state.selectedSchool}
                 schoolData={this.state.schoolData}
                 loadingSchool={this.state.loadingSchool}
@@ -289,7 +289,5 @@ class App extends React.PureComponent {
     );
   }
 }
-
-// export default App;
 
 export default addUrlProps({ urlPropsQueryConfig })(App);

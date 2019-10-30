@@ -27,7 +27,8 @@ const yearMenu = (selectedYear, onChangeYear) => (
     selectedKeys={[selectedYear]}
     style={{ lineHeight: "64px" }}
     onClick={info => {
-      onChangeYear(info.key);
+      const newYear = info.key === "1" ? 2018 : 2017;
+      onChangeYear(newYear);
     }}
   >
     <Menu.Item key="1">2018</Menu.Item>
