@@ -101,7 +101,7 @@ export default ({
   <div>
     <MainNav className="header MainNav">
       <AutoComplete
-        style={{width: '600px'}}
+        style={{width: '66%'}}
         dataSource={locationKeys}
         onSelect={onSelectSchool}
         placeholder="Search by school name"
