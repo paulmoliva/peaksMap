@@ -17,9 +17,10 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
     padding: 10px;
     font-size: 14px;
     color: black;
-    bottom: 20px;
-    left: -60px;
     z-index: 100;
+
+    bottom: 40px;
+    left: 0;
   `;
 
   const TopHalf = styled.div``;
@@ -38,6 +39,15 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
       cursor: pointer;
       background: white;
     }
+  `;
+
+  const BottomArrow = styled(Icon)`
+    position: absolute;
+    font-size: 35px;
+    /* border: 1px solid red; */
+    bottom: -20px;
+    left: 0;
+    color: white;
   `;
 
   return (
@@ -69,6 +79,7 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
           </div>
         )}
       </BottomHalf>
+      <BottomArrow type="caret-down" theme="filled" />
     </InfoWindowContainer>
   );
 };
@@ -124,7 +135,7 @@ const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
 
   return (
     <MarkerContainer>
-      <MarkerIcon type="home" color={color} />
+      <MarkerIcon type="home" theme="filled" color={color} />
       {show && (
         <InfoWindow
           scores={currentScores}
