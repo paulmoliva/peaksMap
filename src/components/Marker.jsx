@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
 import { Icon, Typography } from "antd";
 import { COLORS } from "../data/constants";
@@ -49,6 +49,7 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
     left: 0;
     color: white;
   `;
+
 
   return (
     <InfoWindowContainer>
@@ -112,14 +113,20 @@ const getIconColor = averageScore => {
 
 const formatScores = (school, selectedScores) => {
   const currentScoresRaw = selectedScores[school];
-
+  let formattedScores;
   if (!currentScoresRaw) {
     return null;
   } else {
-    return {
+    formattedScores = {
       Math: parseInt(currentScoresRaw["Math"]),
       ELA: parseInt(currentScoresRaw["ELA"])
     };
+  }
+
+  if (Number.isNaN(formattedScores.Math) || Number.isNaN(formattedScores.ELA)) {
+    return null;
+  } else {
+    return formattedScores;
   }
 };
 

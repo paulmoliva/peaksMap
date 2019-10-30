@@ -44,10 +44,19 @@ const TabPaneContent = styled.div`
   justify-content: center;
 `;
 
+const SubjectGradeView = styled.div`
+  text-align: ${props => props.isGradeSummary ? 'center' : 'default'};
+  font-size: ${props => props.isGradeSummary ? '16px' : 'inherit'};
+`;
+
 const createTabPane = (subject, key, schoolData, loadingSchool) => {
   const subjectGradeData = schoolData.filter(
     school => school.Subject === subject
   );
+
+  // const sortedSubjectGradeData = subjectGradeData.sort();
+
+  
 
   let prettySchoolData = subjectGradeData.map(data => {
     let percentageFormatted;
@@ -61,21 +70,16 @@ const createTabPane = (subject, key, schoolData, loadingSchool) => {
     
     const proficiencyDescription = "below proficient";
 
-    const getGradeHeader = grade =>
-      grade === "All Grades" ? (
-        <Paragraph strong>All Grades:</Paragraph>
-      ) : (
-        <Paragraph>Grade {grade}:</Paragraph>
-      );
-
+    const isGradeSummary = data.grade === "All Grades";
+    const gradeText = isGradeSummary ? 'All Grades' : `Grade ${data.grade}`;
     return (
-      <div key={`${data.grade}`}>
-        {getGradeHeader(data.grade)}
-        <Paragraph>
+      <SubjectGradeView key={`${data.grade}`} isGradeSummary={isGradeSummary}>
+        <Paragraph className="grade-header">{gradeText}:</Paragraph>
+        <Paragraph className="grade-data">
           <Text strong> {percentageFormatted} </Text>
           <Text>{proficiencyDescription}</Text>
         </Paragraph>
-      </div>
+      </SubjectGradeView>
     );
   });
 

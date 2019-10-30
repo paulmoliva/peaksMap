@@ -138,10 +138,7 @@ class App extends React.PureComponent {
     const { selectedYear } = this.props;
     const { selectedSchool } = this.state;
     const year = barelyUpdatedYear ? barelyUpdatedYear : selectedYear;
-    // console.log(yearKey);
-
-    // const year = yearKey === "1" ? 2018 : 2017;
-    // const year = yearKey === "1" ? 2018 : 2017;
+    
     const queryStr = qs.stringify({ school_name: selectedSchool, year });
     const urlStr = `${BASE_API_URL}${queryStr}`;
 
@@ -164,7 +161,6 @@ class App extends React.PureComponent {
       ? barelyUpdatedDataSet
       : selectedDataset;
 
-      console.log(finalDataset);
     if (finalDataset === "asd") {
       return places.asd;
     } else {

@@ -43,7 +43,6 @@ class SimpleMap extends Component {
     ) {
       if (!this.props.selectedSchoolCoordinates || !window.g_maps) {
         console.log("error zooming to new location!");
-        debugger;
       } else {
         const { lat, lng } = this.props.selectedSchoolCoordinates;
         const center = new window.g_maps.LatLng(lat, lng);
