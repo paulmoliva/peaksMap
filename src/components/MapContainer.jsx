@@ -16,7 +16,7 @@ const Legend = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  background: #7a7979;
+  background: rgba(121, 121, 121, 0.66);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
