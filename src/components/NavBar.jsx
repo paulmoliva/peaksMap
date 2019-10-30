@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Layout, Dropdown, Menu, Breadcrumb, Icon, AutoComplete, Input } from "antd";
+import { Layout, Dropdown, Menu,  Icon, AutoComplete, Input } from "antd";
 import Logo from './Logo';
 
 const { Header } = Layout;
@@ -124,7 +124,7 @@ export default ({
             overlay={districtMenu(selectedDataset, key => {
               onChangeFilter("dataset", key);
             })}
-            trigger="click"
+            trigger={["click"]}
           >
             <a className="ant-dropdown-link" href="#">
               <FilterIcon type="down" />
@@ -137,7 +137,7 @@ export default ({
           overlay={yearMenu(selectedYear, key => {
             onChangeFilter("year", key);
           })}
-          trigger="click"
+          trigger={["click"]}
         >
           <a className="ant-dropdown-link" href="#">
             <FilterIcon type="down" />

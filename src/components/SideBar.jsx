@@ -69,7 +69,7 @@ const createTabPane = (subject, key, schoolData, loadingSchool) => {
       );
 
     return (
-      <div>
+      <div key={`${data.grade}`}>
         {getGradeHeader(data.grade)}
         <Paragraph>
           <Text strong> {percentageFormatted} </Text>

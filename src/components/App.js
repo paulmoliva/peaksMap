@@ -12,6 +12,8 @@ import { asdLocations, asdScores } from "../data/asd";
 import { alaskaLocations, alaskaScores } from "../data/alaska";
 
 const qs = require("qs");
+const BASE_API_URL =
+  "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
 
 const { Content } = Layout;
 
@@ -42,7 +44,7 @@ const urlPropsQueryConfig = {
 };
 
 class App extends React.PureComponent {
-  state = {
+  state = Object.freeze({
     selectedSchool: null,
     selectedYear: "1", // || 1: 2018 - 2: 2017
     selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
@@ -54,7 +56,7 @@ class App extends React.PureComponent {
       asd: [],
       alaska: []
     }
-  };
+  });
 
   static defaultProps = {
     foo: 123,
@@ -87,19 +89,39 @@ class App extends React.PureComponent {
         this.fetchSchoolData();
       });
     } else {
-      this.setState({ selectedDataset: key });
+      // switch district
+      this.setState({ selectedDataset: key }, () => {
+        // this sets all .show values to false
+        this.closeAllInfowindows();
+      });
     }
+  }
+
+  closeAllInfowindows() {
+    this.setState(state => {
+      // get the old open one too
+
+      const selectedPlaces = this.getSelectedPlaces();
+      const showResetPlaces = selectedPlaces.map(place => ({
+        ...place,
+        show: false
+      }));
+
+      if (this.state.selectedDataset === "1") {
+        return { places: { ...this.state.places, asd: showResetPlaces } };
+      } else {
+        return { places: { ...this.state.places, alaska: showResetPlaces } };
+      }
+    });
   }
 
   async fetchSchoolData() {
     // http://payroll.alaskapolicyforum.net/peaks/?school_name=Susitna%20Elementary&year=2018
 
     const { selectedSchool, selectedYear } = this.state;
-    const baseUrl =
-      "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
     const year = selectedYear === "1" ? 2018 : 2017;
     const queryStr = qs.stringify({ school_name: selectedSchool, year });
-    const urlStr = `${baseUrl}${queryStr}`;
+    const urlStr = `${BASE_API_URL}${queryStr}`;
 
     this.setState({ loadingSchool: true });
     const response = await fetch(urlStr);
@@ -113,29 +135,35 @@ class App extends React.PureComponent {
     });
   }
 
+  getSelectedPlaces() {
+    const { places, selectedDataset } = this.state;
+
+    if (selectedDataset === "1") {
+      return places.asd;
+    } else {
+      return places.alaska;
+    }
+  }
+
   toggleShowInfo(key) {
     this.setState(state => {
-      const selectedPlace =
-        this.state.selectedDataset === "1"
-          ? this.state.places.asd
-          : this.state.places.alaska;
-
       // get the old open one too
 
-      const lastOpenIndex = selectedPlace.findIndex(e => e.show);
+      const selectedPlaces = this.getSelectedPlaces();
+      const lastOpenIndex = selectedPlaces.findIndex(e => e.show);
 
-      const index = selectedPlace.findIndex(e => e.name === key);
-      
-      // selectedPlace[index].show = !selectedPlace[index].show; // eslint-disable-line no-param-reassign
-      selectedPlace[index].show = true; // eslint-disable-line no-param-reassign
+      const index = selectedPlaces.findIndex(e => e.name === key);
+
+      // selectedPlaces[index].show = !selectedPlaces[index].show; // eslint-disable-line no-param-reassign
+      selectedPlaces[index].show = true; // eslint-disable-line no-param-reassign
       if (lastOpenIndex !== -1) {
-        selectedPlace[lastOpenIndex].show = false;
+        selectedPlaces[lastOpenIndex].show = false;
       }
-      
+
       if (this.state.selectedDataset === "1") {
-        return { places: { ...this.state.places, asd: selectedPlace } };
+        return { places: { ...this.state.places, asd: selectedPlaces } };
       } else {
-        return { places: { ...this.state.places, alaska: selectedPlace } };
+        return { places: { ...this.state.places, alaska: selectedPlaces } };
       }
     });
   }
@@ -161,7 +189,7 @@ class App extends React.PureComponent {
       onChangeUrlQueryParams
     } = this.props;
 
-    console.log(bar);
+    // console.log(bar);
 
     return (
       <Layout>
@@ -170,7 +198,10 @@ class App extends React.PureComponent {
           selectedDataset={this.state.selectedDataset}
           selectedSchool={this.state.selectedSchool}
           onChangeFilter={(filter, key) => this.onChangeFilter(filter, key)}
-          onSelectSchool={school => this.switchSchoolAndFetch(school)}
+          onSelectSchool={school => {
+            this.switchSchoolAndFetch(school);
+            this.toggleShowInfo(school);
+          }}
           locationKeys={Object.keys(selectedDistrictCoordinates)}
         />
         {/* https://ant.design/components/modal/ */}
@@ -210,6 +241,7 @@ class App extends React.PureComponent {
             <MapContainer
               height="85vh"
               places={places}
+              selectedPlaces={this.getSelectedPlaces()}
               selectedScores={selectedScores}
               selectedDistrictCoordinates={selectedDistrictCoordinates}
               switchSchoolAndFetch={school => this.switchSchoolAndFetch(school)}

@@ -1,15 +1,8 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import styled from "styled-components";
-import { Icon, Popover, Typography } from "antd";
-import { COLORS } from "../data/constants";
-
-const { Paragraph, Text } = Typography;
-
+import Marker from './Marker';
 // https://github.com/google-map-react/google-map-react-examples
-
-// MakerInfoWindow
-// https://github.com/google-map-react/google-map-react-examples/blob/master/src/examples/MarkerInfoWindow.js
 
 const Map = styled.div``;
 
@@ -20,122 +13,6 @@ const ALASKA_CENTER = {
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE";
 
-// InfoWindow component
-const InfoWindow = ({ place, toggleShowInfo, scores }) => {
-  const InfoWindowContainer = styled.div`
-    position: absolute;
-    width: 220px;
-    background: white;
-    box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    font-size: 14px;
-    color: black;
-    bottom: 20px;
-    left: -60px;
-    z-index: 100;
-  `;
-
-  const CloseButton = styled(Icon)`
-    font-size: 14px;
-    position: absolute;
-    right: 10px;
-    &:hover {
-      cursor: pointer;
-      background: white;
-    }
-  `;
-
-  return (
-    <InfoWindowContainer>
-      <CloseButton
-        type="close"
-        onClick={() => {
-          toggleShowInfo(place.name);
-        }}
-      />
-      <Paragraph>
-        <Text strong>{place.name}</Text>
-      </Paragraph>
-      {scores ? (
-        <div>
-          <Paragraph>
-            <Text strong>{scores["ELA"]}%</Text> below proficiency in ELA
-          </Paragraph>
-          <Paragraph>
-            <Text strong>{scores["Math"]}%</Text> below proficiency in Math
-          </Paragraph>
-        </div>
-      ) : (
-        <div>
-          <Paragraph>No data found.</Paragraph>
-        </div>
-      )}
-    </InfoWindowContainer>
-  );
-};
-
-const MarkerIcon = styled(Icon)`
-  &:hover {
-    cursor: pointer;
-  }
-  color: ${props => props.color};
-  font-size: 15px;
-`;
-
-const MarkerContainer = styled.div`
-  position: relative;
-`;
-
-const getIconColor = averageScore => {
-  if (!averageScore) {
-    return "white";
-  }
-
-  if (averageScore < 31) {
-    return COLORS.GREEN;
-  } else if (averageScore >= 31 && averageScore < 51) {
-    return COLORS.YELLOW;
-  } else {
-    return COLORS.RED;
-  }
-};
-
-const formatScores = (school, selectedScores) => {
-  const currentScoresRaw = selectedScores[school];
-
-  if (!currentScoresRaw) {
-    return null;
-  } else {
-    return {
-      Math: parseInt(currentScoresRaw["Math"]),
-      ELA: parseInt(currentScoresRaw["ELA"])
-    };
-  }
-};
-
-const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
-  const currentScores = formatScores(place.name, selectedScores);
-  let averageScore = null;
-
-  if (currentScores) {
-    averageScore = (currentScores.Math + currentScores.ELA) / 2;
-  }
-
-  const color = getIconColor(averageScore);
-
-  return (
-    <MarkerContainer>
-      <MarkerIcon type="home" color={color} />
-      {show && (
-        <InfoWindow
-          scores={currentScores}
-          place={place}
-          toggleShowInfo={toggleShowInfo}
-        />
-      )}
-    </MarkerContainer>
-  );
-};
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -157,30 +34,21 @@ class SimpleMap extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.selectedDataset !== this.props.selectedDataset) {
       if (this.state.apiIsLoaded) {
-        this.fitBounds(window.g_map, window.g_maps, this.getSelectedPlaces());
-      }
+        this.fitBounds(window.g_map, window.g_maps, this.props.selectedPlaces);
+      } 
     }
     if (
       prevProps.selectedSchoolCoordinates !==
       this.props.selectedSchoolCoordinates
     ) {
-      if (!this.props.selectedSchoolCoordinates) {
-        return;
+      if (!this.props.selectedSchoolCoordinates || !window.g_maps) {
+        console.log("error zooming to new location!");
+        debugger;
+      } else {
+        const { lat, lng } = this.props.selectedSchoolCoordinates;
+        const center = new window.g_maps.LatLng(lat, lng);
+        window.g_map.panTo(center);
       }
-      // const { lat, lng } = this.props.selectedSchoolCoordinates;
-      // this.setGlobalCenter(lat, lng);
-      // const center = new window.g_maps.LatLng(lat, lng);
-      // window.g_map.panTo(center);
-    }
-  }
-
-  getSelectedPlaces() {
-    const { places, selectedDataset } = this.props;
-
-    if (selectedDataset === "1") {
-      return places.asd;
-    } else {
-      return places.alaska;
     }
   }
 
@@ -229,11 +97,11 @@ class SimpleMap extends Component {
 
   onChildClickCallback(key) {
     this.props.toggleShowInfo(key);
+    this.props.switchSchoolAndFetch(key);
   }
 
   render() {
-    const { height, zoom } = this.props;
-    const selectedPlaces = this.getSelectedPlaces();
+    const { height, zoom, selectedPlaces } = this.props;
 
     return (
       // TODO: ZOOM IS NOT FUCKING UPDATING

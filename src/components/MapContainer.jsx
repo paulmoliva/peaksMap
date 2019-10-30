@@ -5,7 +5,7 @@ import MediaQuery from "react-responsive";
 import { COLORS } from "../data/constants";
 import Map from "./Map";
 
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 const MapContainer = styled.div`
   position: relative;
@@ -91,7 +91,8 @@ export default ({
   switchSchoolAndFetch,
   selectedSchoolCoordinates,
   places,
-  toggleShowInfo
+  toggleShowInfo,
+  selectedPlaces
 }) => (
   <MapContainer>
     <Map
@@ -103,6 +104,7 @@ export default ({
       selectedSchoolCoordinates={selectedSchoolCoordinates}
       places={places}
       toggleShowInfo={toggleShowInfo}
+      selectedPlaces={selectedPlaces}
     />
     <Legend className="Legend">
       <LegendItem initialRange={0} finalRange={30}></LegendItem>
