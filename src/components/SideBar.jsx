@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Typography, Tabs, Divider, Spin } from "antd";
-import renderEmpty from "antd/lib/config-provider/renderEmpty";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 

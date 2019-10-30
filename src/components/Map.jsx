@@ -1,8 +1,15 @@
 import React, { Component, Fragment } from "react";
 import GoogleMapReact from "google-map-react";
 import styled from "styled-components";
-import { Icon } from "antd";
+import { Icon, Popover, Typography } from "antd";
 import { COLORS } from "../data/constants";
+
+const { Paragraph, Text } = Typography;
+
+// https://github.com/google-map-react/google-map-react-examples
+
+// MakerInfoWindow
+// https://github.com/google-map-react/google-map-react-examples/blob/master/src/examples/MarkerInfoWindow.js
 
 const Map = styled.div``;
 
@@ -11,44 +18,122 @@ const ALASKA_CENTER = {
   lng: -149.93
 };
 
+const GOOGLE_MAPS_API_KEY = "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE";
+
 // InfoWindow component
-const InfoWindow = props => {
-  const { place } = props;
-  const infoWindowStyle = {
-    position: "relative",
-    bottom: 0,
-    left: "0px",
-    width: 220,
-    backgroundColor: "white",
-    boxShadow: "0 2px 7px 1px rgba(0, 0, 0, 0.3)",
-    padding: 10,
-    fontSize: 14,
-    zIndex: 100
-  };
+const InfoWindow = ({ place, toggleShowInfo, scores }) => {
+  const InfoWindowContainer = styled.div`
+    position: absolute;
+    width: 220px;
+    background: white;
+    box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-size: 14px;
+    color: black;
+    bottom: 20px;
+    left: -60px;
+    z-index: 100;
+  `;
+
+  const CloseButton = styled(Icon)`
+    font-size: 14px;
+    position: absolute;
+    right: 10px;
+    &:hover {
+      cursor: pointer;
+      background: white;
+    }
+  `;
 
   return (
-    <div style={infoWindowStyle}>
-      <div style={{ fontSize: 16 }}>{place.name}</div>
-    </div>
+    <InfoWindowContainer>
+      <CloseButton
+        type="close"
+        onClick={() => {
+          toggleShowInfo(place.name);
+        }}
+      />
+      <Paragraph>
+        <Text strong>{place.name}</Text>
+      </Paragraph>
+      {scores ? (
+        <div>
+          <Paragraph>
+            <Text strong>{scores["ELA"]}%</Text> below proficiency in ELA
+          </Paragraph>
+          <Paragraph>
+            <Text strong>{scores["Math"]}%</Text> below proficiency in Math
+          </Paragraph>
+        </div>
+      ) : (
+        <div>
+          <Paragraph>No data found.</Paragraph>
+        </div>
+      )}
+    </InfoWindowContainer>
   );
 };
 
-const Marker = props => {
-  const markerStyle = {
-    border: "1px solid white",
-    borderRadius: "50%",
-    height: 10,
-    width: 10,
-    backgroundColor: props.show ? "red" : "blue",
-    cursor: "pointer",
-    zIndex: 10
-  };
+const MarkerIcon = styled(Icon)`
+  &:hover {
+    cursor: pointer;
+  }
+  color: ${props => props.color};
+  font-size: 15px;
+`;
+
+const MarkerContainer = styled.div`
+  position: relative;
+`;
+
+const getIconColor = averageScore => {
+  if (!averageScore) {
+    return "white";
+  }
+
+  if (averageScore < 31) {
+    return COLORS.GREEN;
+  } else if (averageScore >= 31 && averageScore < 51) {
+    return COLORS.YELLOW;
+  } else {
+    return COLORS.RED;
+  }
+};
+
+const formatScores = (school, selectedScores) => {
+  const currentScoresRaw = selectedScores[school];
+
+  if (!currentScoresRaw) {
+    return null;
+  } else {
+    return {
+      Math: parseInt(currentScoresRaw["Math"]),
+      ELA: parseInt(currentScoresRaw["ELA"])
+    };
+  }
+};
+
+const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
+  const currentScores = formatScores(place.name, selectedScores);
+  let averageScore = null;
+
+  if (currentScores) {
+    averageScore = (currentScores.Math + currentScores.ELA) / 2;
+  }
+
+  const color = getIconColor(averageScore);
 
   return (
-    <Fragment>
-      <div style={markerStyle} />
-      {props.show && <InfoWindow place={props.place} />}
-    </Fragment>
+    <MarkerContainer>
+      <MarkerIcon type="home" color={color} />
+      {show && (
+        <InfoWindow
+          scores={currentScores}
+          place={place}
+          toggleShowInfo={toggleShowInfo}
+        />
+      )}
+    </MarkerContainer>
   );
 };
 
@@ -63,166 +148,76 @@ class SimpleMap extends Component {
     zoom: 11
   };
 
-  state = {
+  state = Object.freeze({
     markers: [],
-    openWindow: null
-  };
-
-  componentWillMount() {
-    this.asdMarkers = null;
-    this.alaskaMarkers = null;
-  }
+    openWindow: null,
+    apiIsLoaded: false
+  });
 
   componentDidUpdate(prevProps) {
     if (prevProps.selectedDataset !== this.props.selectedDataset) {
-      if (this.state.openWindow) {
-        this.state.openWindow.close();
+      if (this.state.apiIsLoaded) {
+        this.fitBounds(window.g_map, window.g_maps, this.getSelectedPlaces());
       }
-      this.updateMarkers();
-      // if (this.props.selectedDataset === "1") {
-      //   this.setZoom(11);
-      //   this.setGlobalCenter();
-      // } else {
-      //   this.setZoom(4);
-      //   this.setGlobalCenter();
-      // }
     }
-    // if (
-    //   prevProps.selectedSchoolCoordinates !==
-    //   this.props.selectedSchoolCoordinates
-    // ) {
-    //   if (!this.props.selectedSchoolCoordinates) {
-    //     debugger;
-    //     return;
-    //   }
-    //   const { lat, lng } = this.props.selectedSchoolCoordinates;
-    //   const center = new window.g_maps.LatLng(lat, lng);
-    //   window.g_map.panTo(center);
-    // }
+    if (
+      prevProps.selectedSchoolCoordinates !==
+      this.props.selectedSchoolCoordinates
+    ) {
+      if (!this.props.selectedSchoolCoordinates) {
+        return;
+      }
+      // const { lat, lng } = this.props.selectedSchoolCoordinates;
+      // this.setGlobalCenter(lat, lng);
+      // const center = new window.g_maps.LatLng(lat, lng);
+      // window.g_map.panTo(center);
+    }
+  }
+
+  getSelectedPlaces() {
+    const { places, selectedDataset } = this.props;
+
+    if (selectedDataset === "1") {
+      return places.asd;
+    } else {
+      return places.alaska;
+    }
   }
 
   setGlobalCenter(lat = ALASKA_CENTER.lat, lng = ALASKA_CENTER.lng) {
+    if (!window.g_map) return;
+
     const center = new window.g_maps.LatLng(lat, lng);
     window.g_map.panTo(center);
-    // window.g_map && window.g_map.setCenter(new window.g_maps.LatLng(lat, lng));
   }
 
-  setZoom(zoomLevel) {
-    window.g_map && window.g_map.setZoom(zoomLevel);
-  }
-
-  makeInfoWindow(g_maps, school, scores) {
-    if (scores) {
-      return new g_maps.InfoWindow({
-        content: `
-        <div>
-          <p>Name:${school}</p>
-          <p>
-            ${scores["ELA"]}% Below Proficiency in ELA:
-          </p>
-          <p>
-            ${scores["Math"]}% Below Proficiency in Math:
-          </p>
-        </div>`,
-        maxWidth: 200
-      });
-    } else {
-      return;
-    }
-  }
-
-  makeMarkers(g_map, g_maps) {
-    const { selectedScores, selectedDistrictCoordinates } = this.props;
-
-    const getIconColor = averageScore => {
-      if (!averageScore) {
-        return "white";
-      }
-
-      if (averageScore < 31) {
-        return COLORS.GREEN;
-      } else if (averageScore >= 31 && averageScore < 51) {
-        return COLORS.YELLOW;
-      } else {
-        return COLORS.RED;
-      }
-    };
-
-    const formatScores = school => {
-      const currentScoresRaw = selectedScores[school];
-
-      if (!currentScoresRaw) {
-        return null;
-      } else {
-        return {
-          Math: parseInt(currentScoresRaw["Math"]),
-          ELA: parseInt(currentScoresRaw["ELA"])
-        };
-      }
-    };
-
-    const finalMarkers = Object.keys(selectedDistrictCoordinates).map(
-      marker => {
-        const currentScores = formatScores(marker);
-        let averageScore = null;
-
-        if (currentScores) {
-          averageScore = (currentScores.Math + currentScores.ELA) / 2;
-        }
-
-        const infoWindow = this.makeInfoWindow(g_maps, marker, currentScores);
-        const color = getIconColor(averageScore);
-
-        const icon = {
-          path: g_maps.SymbolPath.CIRCLE,
-          scale: 5,
-          fillColor: color,
-          strokeColor: color
-        };
-
-        const newMarker = new g_maps.Marker({
-          position: {
-            lat: selectedDistrictCoordinates[marker].lat,
-            lng: selectedDistrictCoordinates[marker].lng
-          },
-          map: g_map,
-          maxWidth: 50,
-          icon
-        });
-
-        newMarker.addListener("click", () => {
-          if (this.state.openWindow) {
-            this.state.openWindow.close();
-          }
-
-          this.setState({ openWindow: infoWindow });
-          infoWindow.open(g_map, newMarker);
-
-          this.props.switchSchoolAndFetch(marker);
-        });
-      }
-    );
-
-    this.setState({ markers: finalMarkers });
-  }
-
+  // setZoom(zoomLevel) {
+  //   window.g_map && window.g_map.setZoom(zoomLevel);
+  // }
   getMapBounds = (map, maps, places) => {
     const bounds = new maps.LatLngBounds();
 
     places.forEach(place => {
-      bounds.extend(new maps.LatLng(place.props.lat, place.props.lng));
+      bounds.extend(new maps.LatLng(place.lat, place.lng));
     });
     return bounds;
   };
 
   apiIsLoaded = (map, maps, places) => {
+    const bounds = this.fitBounds(map, maps, places);
+
+    this.bindResizeListener(map, maps, bounds);
+    this.setState({ apiIsLoaded: true });
+  };
+
+  fitBounds(map, maps, places) {
     // Get bounds by our places
     const bounds = this.getMapBounds(map, maps, places);
     // Fit map to bounds
     map.fitBounds(bounds);
     // Bind the resize listener
-    this.bindResizeListener(map, maps, bounds);
-  };
+    return bounds;
+  }
 
   bindResizeListener = (map, maps, bounds) => {
     maps.event.addDomListenerOnce(map, "idle", () => {
@@ -234,80 +229,36 @@ class SimpleMap extends Component {
 
   onChildClickCallback(key) {
     this.props.toggleShowInfo(key);
-    // this.setState(state => {
-    //   const index = state.places.findIndex(e => e.name === key);
-    //   state.places[index].show = !state.places[index].show; // eslint-disable-line no-param-reassign
-    //   return { places: state.places };
-    // });
-  }
-
-  updateMarkers(cb = () => {}) {
-    const { selectedDistrictCoordinates } = this.props;
-    const preLoadedmarkers =
-      this.props.selectedDataset === "1" ? this.asdMarkers : this.alaskaMarkers;
-
-    const finalMarkers = preLoadedmarkers
-      ? preLoadedmarkers
-      : Object.keys(selectedDistrictCoordinates).map(marker => {
-          return (
-            <Icon
-              type="home"
-              key={marker}
-              text={marker}
-              lat={selectedDistrictCoordinates[marker].lat}
-              lng={selectedDistrictCoordinates[marker].lng}
-              onClick={() => {
-                this.props.switchSchoolAndFetch(marker);
-              }}
-            />
-          );
-        });
-
-    if (this.props.selectedDataset === "1") {
-      this.asdMarkers = finalMarkers;
-    } else {
-      this.alaskaMarkers = finalMarkers;
-    }
-
-    this.setState({ markers: finalMarkers }, () => cb(finalMarkers));
   }
 
   render() {
-    const { height, zoom, places } = this.props;
-
-    let selectedPlaces;
-    if (this.props.selectedDataset === "1") {
-      selectedPlaces = places.asd;
-    } else {
-      selectedPlaces = places.alaska;
-    }
+    const { height, zoom } = this.props;
+    const selectedPlaces = this.getSelectedPlaces();
 
     return (
       // TODO: ZOOM IS NOT FUCKING UPDATING
       // Important! Always set the container height explicitly
       <Map style={{ height, width: "100%" }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE" }}
+          bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
           zoom={zoom}
           onChildClick={key => this.onChildClickCallback(key)}
           onGoogleApiLoaded={({ map, maps }) => {
             this.setState({ map, maps, loadedMaps: true }, () => {
-              // this.updateMarkers(markers => {
-              //   this.apiIsLoaded(map, maps, markers);
-              // });
-              // this.makeMarkers(map, maps);
+              this.apiIsLoaded(map, maps, selectedPlaces);
             });
 
             window.g_map = map;
             window.g_maps = maps;
-            console.log(map, maps);
           }}
           yesIWantToUseGoogleMapApiInternals
         >
           {selectedPlaces.map(place => (
             <Marker
+              toggleShowInfo={key => this.props.toggleShowInfo(key)}
+              selectedScores={this.props.selectedScores}
               key={place.name}
               lat={place.lat}
               lng={place.lng}
@@ -315,7 +266,6 @@ class SimpleMap extends Component {
               place={place}
             />
           ))}
-          {/* {this.state.markers} */}
         </GoogleMapReact>
       </Map>
     );

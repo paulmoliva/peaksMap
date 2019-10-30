@@ -120,9 +120,18 @@ class App extends React.PureComponent {
           ? this.state.places.asd
           : this.state.places.alaska;
 
+      // get the old open one too
+
+      const lastOpenIndex = selectedPlace.findIndex(e => e.show);
+
       const index = selectedPlace.findIndex(e => e.name === key);
-      debugger;
-      selectedPlace[index].show = !selectedPlace[index].show; // eslint-disable-line no-param-reassign
+      
+      // selectedPlace[index].show = !selectedPlace[index].show; // eslint-disable-line no-param-reassign
+      selectedPlace[index].show = true; // eslint-disable-line no-param-reassign
+      if (lastOpenIndex !== -1) {
+        selectedPlace[lastOpenIndex].show = false;
+      }
+      
       if (this.state.selectedDataset === "1") {
         return { places: { ...this.state.places, asd: selectedPlace } };
       } else {

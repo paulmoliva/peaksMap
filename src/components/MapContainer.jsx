@@ -103,9 +103,7 @@ export default ({
       selectedSchoolCoordinates={selectedSchoolCoordinates}
       places={places}
       toggleShowInfo={toggleShowInfo}
-    >
-      {children}
-    </Map>
+    />
     <Legend className="Legend">
       <LegendItem initialRange={0} finalRange={30}></LegendItem>
       <LegendItem initialRange={31} finalRange={50}></LegendItem>
