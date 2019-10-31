@@ -66,7 +66,7 @@ const MainNav = styled(Header)`
   @media (max-width: 550px) {
     flex-direction: column-reverse;
     padding: 10px 20px 10px 20px;
-    height: 100px;
+    height: 120px;
     justify-content: flex-end;
     
     .ant-select {
@@ -88,7 +88,14 @@ const LogoWrapper = () => (
   <LogoWrapperStyle>
     <Logo />
   </LogoWrapperStyle>
-)
+);
+
+const AutoCompleteContainer = styled.div`
+  width: 300px;
+  @media (max-width: 550px) {
+    max-width: 90%;
+  }
+`;
 
 
 export default ({
@@ -100,22 +107,24 @@ export default ({
 }) => (
   <div>
     <MainNav className="header MainNav">
-      <AutoComplete
-        style={{width: '66%'}}
-        autoFocus={false}
-        dataSource={locationKeys}
-        onSelect={onSelectSchool}
-        placeholder="Search by school name"
-        filterOption={(inputValue, option) =>
-          option.props.children
-            .toUpperCase()
-            .indexOf(inputValue.toUpperCase()) !== -1
-        }
-      >
-        <Input
-          suffix={<Icon type="search" className="certain-category-icon" />}
-        />
-      </AutoComplete>
+      <AutoCompleteContainer className="AutoCompleteContainer">
+        <AutoComplete
+          style={{ width: "100%", zIndex: 100 }}
+          dataSource={locationKeys}
+          onSelect={onSelectSchool}
+          placeholder="Search by school name"
+          filterOption={(inputValue, option) =>
+            option.props.children
+              .toUpperCase()
+              .indexOf(inputValue.toUpperCase()) !== -1
+          }
+        >
+          <Input
+            style={{ zIndex: 100 }}
+            suffix={<Icon type="search" className="certain-category-icon" />}
+          />
+        </AutoComplete>
+      </AutoCompleteContainer>
       <LogoWrapper />
     </MainNav>
     <FilterNav className="FilterNav">

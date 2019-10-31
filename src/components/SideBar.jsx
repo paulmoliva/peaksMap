@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 
 const SideBarContainer = styled.div`
   right: 0;
-  z-index: 1100;
+  z-index: 900;
   height: 100%;
 `;
 
