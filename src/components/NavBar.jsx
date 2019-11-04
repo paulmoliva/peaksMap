@@ -12,7 +12,7 @@ const districtMenu = (selectedDatasetKey, onChangeDataset) => (
     selectedKeys={[selectedDatasetKey]}
     style={{ lineHeight: "64px" }}
     onClick={info => {
-      const newDataset = info.key === '1' ? 'asd' : 'statewide';
+      const newDataset = info.key === '1' ? 'asd' : 'alaska';
       onChangeDataset(newDataset);
     }}
   >

@@ -8,8 +8,9 @@ import { addUrlProps, UrlQueryParamTypes } from "react-url-query";
 import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
-import { asdLocations, asdScores } from "../data/asd";
-import { alaskaLocations, alaskaScores } from "../data/alaska";
+import { asdLocations } from "../data/asd";
+import { alaskaLocations } from "../data/alaska";
+import scores from "../data/scores"
 
 const qs = require("qs");
 const BASE_API_URL =
@@ -31,11 +32,6 @@ const ContentGrid = styled(Content)`
 const locationCoordinates = {
   asd: asdLocations,
   alaska: alaskaLocations
-};
-
-const scores = {
-  asd: asdScores,
-  alaska: alaskaScores
 };
 
 const urlPropsQueryConfig = {
@@ -200,8 +196,8 @@ class App extends React.PureComponent {
       selectedDataset === "asd"
         ? locationCoordinates.asd
         : locationCoordinates.alaska;
-
-    const selectedScores = scores.asd;
+    console.log(selectedDataset, this.props)
+    const selectedScores = scores[selectedDataset][this.props.selectedYear];
 
     const selectedSchoolCoordinates =
       selectedDistrictCoordinates[this.state.selectedSchool];

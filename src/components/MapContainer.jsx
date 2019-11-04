@@ -96,6 +96,7 @@ export default ({
   <MapContainer>
     <Map
       height={height}
+      center={selectedDataset}
       selectedDataset={selectedDataset}
       selectedDistrictCoordinates={selectedDistrictCoordinates}
       selectedScores={selectedScores}

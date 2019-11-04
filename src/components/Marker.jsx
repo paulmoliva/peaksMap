@@ -118,8 +118,8 @@ const formatScores = (school, selectedScores) => {
     return null;
   } else {
     formattedScores = {
-      Math: parseInt(currentScoresRaw["Math"]),
-      ELA: parseInt(currentScoresRaw["ELA"])
+      Math: parseInt(currentScoresRaw["Math"].replace('%', '')),
+      ELA: parseInt(currentScoresRaw["ELA"].replace('%', ''))
     };
   }
 
@@ -131,6 +131,7 @@ const formatScores = (school, selectedScores) => {
 };
 
 const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
+  if (!selectedScores[place.name]) return null
   const currentScores = formatScores(place.name, selectedScores);
   let averageScore = null;
 

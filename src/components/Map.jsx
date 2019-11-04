@@ -11,18 +11,21 @@ const ALASKA_CENTER = {
   lng: -149.93
 };
 
+const ASD_CENTER = {
+  lat: 61.2077052,
+  lng: -149.7016999
+};
+
 const GOOGLE_MAPS_API_KEY = "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE";
 
 
 class SimpleMap extends Component {
   static defaultProps = {
-    center: {
-      ...ALASKA_CENTER
-    },
+    center: 'asd',
     map: null,
     maps: null,
     loadedMaps: false,
-    zoom: 11
+    zoom: 10
   };
 
   state = Object.freeze({
@@ -34,8 +37,8 @@ class SimpleMap extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.selectedDataset !== this.props.selectedDataset) {
       if (this.state.apiIsLoaded) {
-        this.fitBounds(window.g_map, window.g_maps, this.props.selectedPlaces);
-      } 
+        const center = this.props.selectedDataset === 'asd' ? ASD_CENTER : ALASKA_CENTER;
+      }
     }
     if (
       prevProps.selectedSchoolCoordinates !==
@@ -71,9 +74,9 @@ class SimpleMap extends Component {
   };
 
   apiIsLoaded = (map, maps, places) => {
-    const bounds = this.fitBounds(map, maps, places);
+    // const bounds = this.fitBounds(map, maps, places);
 
-    this.bindResizeListener(map, maps, bounds);
+    // this.bindResizeListener(map, maps, bounds);
     this.setState({ apiIsLoaded: true });
   };
 
@@ -108,7 +111,7 @@ class SimpleMap extends Component {
       <Map style={{ height, width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
-          defaultCenter={this.props.center}
+          defaultCenter={ASD_CENTER}
           defaultZoom={this.props.zoom}
           zoom={zoom}
           onChildClick={key => this.onChildClickCallback(key)}
