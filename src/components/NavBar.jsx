@@ -153,7 +153,7 @@ export default ({
           >
             <a className="ant-dropdown-link" href="#">
               <FilterIcon type="down" />
-              Select Dataset
+              Select Dataset ({[null, 'ASD', 'Alaska Statewide'][selectedDatasetKey]})
             </a>
           </Dropdown>
         </div>
@@ -166,7 +166,7 @@ export default ({
         >
           <a className="ant-dropdown-link" href="#">
             <FilterIcon type="down" />
-            Select Year
+            Select Year ({[null, 2018, 2017][selectedYear]})
           </a>
         </Dropdown>
       </div>

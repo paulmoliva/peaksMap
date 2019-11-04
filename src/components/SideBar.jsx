@@ -110,7 +110,14 @@ const createTabPane = (subject, key, schoolData, loadingSchool) => {
 
   
 
-  let prettySchoolData = subjectGradeData.map(data => {
+  let prettySchoolData = subjectGradeData.sort((a, b) => {
+      console.log(a, b);
+      let gradeA = a.grade;
+      let gradeB = b.grade;
+      if (a.grade === 'All Grades') gradeA = 99;
+      if (b.grade === 'All Grades') gradeB = 99;
+      return gradeA - gradeB;
+  }).map(data => {
     let percentageFormatted;
     const percentage = parseInt(data.NotProficientPercent.split("%")[0]);
 
