@@ -118,8 +118,8 @@ const formatScores = (school, selectedScores) => {
     return null;
   } else {
     formattedScores = {
-      Math: parseInt(currentScoresRaw["Math"].replace('%', '')),
-      ELA: parseInt(currentScoresRaw["ELA"].replace('%', ''))
+      Math: 99 - Math.floor(parseInt(currentScoresRaw["Math"].replace(/(\D|\.)/, ''))),
+      ELA: 99 - Math.floor(parseInt(currentScoresRaw["ELA"].replace(/(\D|\.)/, '')))
     };
   }
 
