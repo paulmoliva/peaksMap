@@ -112,8 +112,7 @@ class SimpleMap extends Component {
         <GoogleMapReact
           bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
           defaultCenter={ASD_CENTER}
-          defaultZoom={this.props.zoom}
-          zoom={zoom}
+          defaultZoom={this.props.selectedDataset === 'asd' ? 10 : 4}
           onChildClick={key => this.onChildClickCallback(key)}
           onGoogleApiLoaded={({ map, maps }) => {
             this.setState({ map, maps, loadedMaps: true }, () => {

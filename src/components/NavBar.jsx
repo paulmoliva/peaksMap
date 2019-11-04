@@ -13,7 +13,19 @@ const districtMenu = (selectedDatasetKey, onChangeDataset) => (
     style={{ lineHeight: "64px" }}
     onClick={info => {
       const newDataset = info.key === '1' ? 'asd' : 'alaska';
-      onChangeDataset(newDataset);
+      const center = info.key !== '1' ? {
+            lat: 61.19,
+            lng: -149.93
+      } : {
+            lat: 61.2077052,
+            lng: -149.7016999
+        };
+        window.g_map.panTo(center);
+
+        // eslint-disable-next-line no-unused-expressions
+        info.key !== '1' ? window.g_map.setZoom(4) : window.g_map.setZoom(10);
+
+        onChangeDataset(newDataset);
     }}
   >
     <Menu.Item key="1">Anchorage School District</Menu.Item>

@@ -114,7 +114,7 @@ const getIconColor = averageScore => {
 const formatScores = (school, selectedScores) => {
   const currentScoresRaw = selectedScores[school];
   let formattedScores;
-  if (!currentScoresRaw) {
+  if (!currentScoresRaw || !currentScoresRaw["Math"] || !currentScoresRaw["ELA"]) {
     return null;
   } else {
     formattedScores = {

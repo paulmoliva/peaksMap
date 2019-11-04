@@ -258,7 +258,7 @@ class App extends React.PureComponent {
               selectedScores={selectedScores}
               selectedDistrictCoordinates={selectedDistrictCoordinates}
               switchSchoolAndFetch={school => this.switchSchoolAndFetch(school)}
-              selectedDatasetKey={selectedDatasetKey}
+              selectedDataset={selectedDataset}
               selectedSchoolCoordinates={selectedSchoolCoordinates}
               toggleShowInfo={key => this.toggleShowInfo(key)}
               openModal={() =>
