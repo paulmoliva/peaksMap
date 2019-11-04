@@ -17,9 +17,9 @@ const districtMenu = (selectedDatasetKey, onChangeDataset) => (
             lat: 61.19,
             lng: -149.93
       } : {
-            lat: 61.2077052,
-            lng: -149.7016999
-        };
+          lat: 61.2077052,
+          lng: -149.7516999
+      };
         window.g_map.panTo(center);
 
         // eslint-disable-next-line no-unused-expressions

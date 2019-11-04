@@ -13,7 +13,7 @@ const ALASKA_CENTER = {
 
 const ASD_CENTER = {
   lat: 61.2077052,
-  lng: -149.7016999
+  lng: -149.7516999
 };
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyAM_iXHF7lBSpOtMMcCkA7N8t70AkqPDmE";
