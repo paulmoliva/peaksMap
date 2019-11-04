@@ -60,19 +60,24 @@ class App extends React.PureComponent {
   };
 
   componentDidMount() {
-    const formattedAsdPlaces = Object.keys(asdLocations).map(place => ({
-      name: place,
-      lat: asdLocations[place].lat,
-      lng: asdLocations[place].lng,
-      show: false
-    }));
+    const selectedYear = this.props.selectedYear === 1 ? '2018' : '2017';
+    const formattedAsdPlaces = Object.keys(scores['asd'][selectedYear]).filter(it => Boolean(asdLocations[it])).map(place => {
+      return ({
+        name: place,
+        lat: asdLocations[place].lat,
+        lng: asdLocations[place].lng,
+        show: false
+      })
+    });
 
-    const formattedAlaskaPlaces = Object.keys(alaskaLocations).map(place => ({
-      name: place,
-      lat: alaskaLocations[place].lat,
-      lng: alaskaLocations[place].lng,
-      show: false
-    }));
+    const formattedAlaskaPlaces = Object.keys(scores['alaska'][selectedYear]).filter(it => Boolean(alaskaLocations[it])).map(place => {
+      return ({
+        name: place,
+        lat: alaskaLocations[place].lat,
+        lng: alaskaLocations[place].lng,
+        show: false
+      })
+    });
 
     this.setState({
       places: { alaska: formattedAlaskaPlaces, asd: formattedAsdPlaces }

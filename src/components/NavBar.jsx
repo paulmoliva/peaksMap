@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Layout, Dropdown, Menu,  Icon, AutoComplete, Input } from "antd";
 import Logo from './Logo';
+import scores from '../data/scores'
 
 const { Header } = Layout;
 
@@ -122,7 +123,7 @@ export default ({
       <AutoCompleteContainer className="AutoCompleteContainer">
         <AutoComplete
           style={{ width: "100%", zIndex: 100 }}
-          dataSource={locationKeys}
+          dataSource={Object.keys(scores[[null, 'asd', 'alaska'][selectedDatasetKey]][[null, '2018', '2017'][selectedYear]])}
           onSelect={onSelectSchool}
           placeholder="Search by school name"
           filterOption={(inputValue, option) =>

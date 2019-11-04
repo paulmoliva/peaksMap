@@ -124,17 +124,20 @@ class SimpleMap extends Component {
           }}
           yesIWantToUseGoogleMapApiInternals
         >
-          {selectedPlaces.map(place => (
-            <Marker
-              toggleShowInfo={key => this.props.toggleShowInfo(key)}
-              selectedScores={this.props.selectedScores}
-              key={place.name}
-              lat={place.lat}
-              lng={place.lng}
-              show={place.show}
-              place={place}
-            />
-          ))}
+          {selectedPlaces.map(place => {
+            if (!place) return null;
+            return (
+                <Marker
+                    toggleShowInfo={key => this.props.toggleShowInfo(key)}
+                    selectedScores={this.props.selectedScores}
+                    key={place.name}
+                    lat={place.lat}
+                    lng={place.lng}
+                    show={place.show}
+                    place={place}
+                />
+            )
+          })}
         </GoogleMapReact>
       </Map>
     );
