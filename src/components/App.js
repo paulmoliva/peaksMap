@@ -322,6 +322,7 @@ class App extends React.PureComponent {
                   const columns = [{
                     dataField: 'District_Name',
                     text: 'District Names',
+                    sort: true,
                     filter: multiSelectFilter({
                       options: data.filter(Boolean).sort((a, b) => (a.District_Name > b.District_Name) ? 1 : -1 ).reduce((acc, el) => {
                         console.log(el.District_Name)
@@ -339,24 +340,18 @@ class App extends React.PureComponent {
                     sort: true,
                 }, {
                     dataField: 'grade',
+                    sort: true,
                     text: 'Grades',
                     filter: multiSelectFilter({
                     options: selectOptions,
-                    defaultValue: ['All Grades']
+                    defaultValue: ['All Grades'],
                   })}, {
                     dataField: 'Subject',
                     text: 'Subjects',
+                    sort: true,
                     filter: multiSelectFilter({
                     options: {'ELA': 'ELA', 'Math': 'Math', 'Science': 'Science'},
                   }),
-                  }, {
-                    dataField: 'ProficientCount',
-                    text: '# Proficient',
-                    filter: numberFilter()
-                  }, {
-                    dataField: 'NotProficientCount',
-                    text: '# Not Proficient',
-                    filter: numberFilter(),
                   }, {
                     dataField: 'NotProficientPercent',
                     text: '% Not Proficient',
