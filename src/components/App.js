@@ -1,6 +1,6 @@
 import React from "react";
 import "../App.less";
-import { Layout, Modal } from "antd";
+import {Layout, Modal, Spin} from "antd";
 import styled from "styled-components";
 import MediaQuery from "react-responsive";
 import { addUrlProps, UrlQueryParamTypes } from "react-url-query";
@@ -11,6 +11,13 @@ import NavBar from "./NavBar";
 import { asdLocations } from "../data/asd";
 import { alaskaLocations } from "../data/alaska";
 import scores from "../data/scores"
+import {Fetch} from "react-request";
+import filterFactory, {textFilter, numberFilter, Comparator, multiSelectFilter} from 'react-bootstrap-table2-filter';
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+
+
 
 const qs = require("qs");
 const BASE_API_URL =
@@ -36,7 +43,8 @@ const locationCoordinates = {
 
 const urlPropsQueryConfig = {
   selectedYear: { type: UrlQueryParamTypes.number, queryParam: "year" },
-  selectedDataset: { type: UrlQueryParamTypes.string, queryParam: "dataset" }
+  selectedDataset: { type: UrlQueryParamTypes.string, queryParam: "dataset" },
+  selectedView: { type: UrlQueryParamTypes.string, queryParam: "view" }
 };
 
 class App extends React.PureComponent {
@@ -56,7 +64,8 @@ class App extends React.PureComponent {
 
   static defaultProps = {
     selectedYear: 2018,
-    selectedDataset: "asd"
+    selectedDataset: "asd",
+    selectedView: 'Map'
   };
 
   componentDidMount() {
@@ -93,6 +102,10 @@ class App extends React.PureComponent {
       this.fetchSchoolData(key);
       // this.setState({ selectedYear: key }, () => {
       // });
+    } else if (filter === 'view') {
+      onChangeUrlQueryParams({
+        selectedView: key
+      });
     } else {
       // switch district
       onChangeUrlQueryParams({
@@ -208,12 +221,16 @@ class App extends React.PureComponent {
       selectedDistrictCoordinates[this.state.selectedSchool];
 
     const selectedDatasetKey = this.getSelectedDatasetKey();
-
+    const { selectedYear } = this.props;
+    const year = selectedYear;
+    const queryStr = qs.stringify({ year });
+    const urlStr = `${BASE_API_URL}${queryStr}`;
     return (
       <Layout>
         <NavBar
           selectedYear={this.getSelectedYearKey()}
           selectedDatasetKey={selectedDatasetKey}
+          selectedView={this.props.selectedView}
           selectedSchool={this.state.selectedSchool}
           onChangeFilter={(filter, key) => this.onChangeFilter(filter, key)}
           onSelectSchool={school => {
@@ -248,7 +265,7 @@ class App extends React.PureComponent {
           </Modal>
         </MediaQuery>
         <Layout>
-          <ContentGrid
+          {this.props.selectedView === 'Map' && <ContentGrid
             className="ContentGrid"
             style={{
               background: "#fff",
@@ -280,7 +297,141 @@ class App extends React.PureComponent {
                 height="76vh"
               />
             </MediaQuery>
-          </ContentGrid>
+          </ContentGrid>}
+          {this.props.selectedView === 'Table' && <Fetch url={urlStr}>
+              {({ fetching, failed, data }) => {
+                if (fetching) {
+                  return <div style={{display: 'flex', justifyContent: 'center', padding: '40px'}}><Spin size={'large'} tip="Loading Data..." /></div>;
+                }
+
+                if (failed) {
+                  return <div>The request did not succeed.</div>;
+                }
+
+                if (data) {
+                  const selectOptions = {
+                    3: '3',
+                    4: '4',
+                    5: '5',
+                    6: '6',
+                    7: '7',
+                    8: '8',
+                    9: '9',
+                    'All Grades': 'All Grades',
+                  };
+                  const columns = [{
+                    dataField: 'District_Name',
+                    text: 'District Names',
+                    filter: multiSelectFilter({
+                      options: data.filter(Boolean).sort((a, b) => (a.District_Name > b.District_Name) ? 1 : -1 ).reduce((acc, el) => {
+                        console.log(el.District_Name)
+                        if (!el) return acc
+                        return {
+                          ...acc,
+                          [el.District_Name]: el.District_Name
+                        }
+                      }, {})
+                    }),
+                }, {
+                    dataField: 'school_name',
+                    text: 'School Name',
+                    filter: textFilter(),
+                    sort: true,
+                }, {
+                    dataField: 'grade',
+                    text: 'Grades',
+                    filter: multiSelectFilter({
+                    options: selectOptions,
+                    defaultValue: ['All Grades']
+                  })}, {
+                    dataField: 'Subject',
+                    text: 'Subjects',
+                    filter: multiSelectFilter({
+                    options: {'ELA': 'ELA', 'Math': 'Math', 'Science': 'Science'},
+                  }),
+                  }, {
+                    dataField: 'ProficientCount',
+                    text: '# Proficient',
+                    filter: numberFilter()
+                  }, {
+                    dataField: 'NotProficientCount',
+                    text: '# Not Proficient',
+                    filter: numberFilter(),
+                  }, {
+                    dataField: 'NotProficientPercent',
+                    text: '% Not Proficient',
+                    filter: numberFilter({
+                      defaultValue: { number: -0.01, comparator: Comparator.GT }
+                    }),
+                    formatter: cell => cell.replace(/(?!\.)(\D)/g, '') || '*',
+                    sortValue: cell => parseInt(cell.replace(/(?!\.)(\D)/g, '') || '*'),
+                    sort: true
+                  }];
+
+                  const defaultSorted = [{
+                    dataField: 'school_name',
+                    order: 'asc'
+                  }];
+
+                  const rowClasses = (row, rowIndex) => {
+                    let classes = null;
+                    console.log(row)
+                    if (parseInt(row.ProficientPercent) > 70) {
+                      classes = 'green';
+                    } else if (parseInt(row.ProficientPercent) > 50) {
+                      classes = 'yellow';
+                    } else if (parseInt(row.ProficientPercent) > 0) {
+                      classes = 'red'
+                    } else {
+                      classes = 'nodata';
+                    }
+                    return classes;
+                  };
+                  const options = {
+                    paginationSize: 50,
+                    pageStartIndex: 0,
+                    // alwaysShowAllBtns: true, // Always show next and previous button
+                    // withFirstAndLast: false, // Hide the going to First and Last page button
+                    // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+                    // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+                    firstPageText: 'First',
+                    prePageText: 'Back',
+                    nextPageText: 'Next',
+                    lastPageText: 'Last',
+                    nextPageTitle: 'First page',
+                    prePageTitle: 'Pre page',
+                    firstPageTitle: 'Next page',
+                    lastPageTitle: 'Last page',
+                    showTotal: true,
+                    sizePerPageList: [{
+                      text: '50', value: 50
+                    }, {
+                      text: '100', value: 100
+                    }, {
+                      text: 'All', value: data.length
+                    }] // A numeric array is also available. the purpose of above example is custom the text
+                  };
+                  return (
+                      <div style={{padding: '40px'}}>
+                        {/*{JSON.stringify(data)}*/}
+                        <BootstrapTable
+                            condensed
+                            bootstrap4
+                            rowClasses={ rowClasses }
+                            defaultSorted={defaultSorted}
+                            keyField='id'
+                            data={data.map(el => ({...el, ProficientPercent: el.ProficientPercent.replace(/(?!\.)(\D)/g, '') || ''}))}
+                            columns={ columns }
+                            filter={ filterFactory() }
+                            pagination={paginationFactory(options)}
+                            so />
+                      </div>
+                  );
+                }
+
+                return null;
+              }}
+            </Fetch>}
         </Layout>
       </Layout>
     );
