@@ -42,7 +42,7 @@ const urlPropsQueryConfig = {
 class App extends React.PureComponent {
   state = Object.freeze({
     selectedSchool: null,
-    // selectedYear: "1", // || 1: 2018 - 2: 2017
+    // selectedYear: "1", // || 1: 2019 - 2: 2018
     // selectedDataset: "1", // || 1: 'asd' - 2: 'statewide'
     schoolData: [],
     loadingSchool: false,
@@ -55,12 +55,12 @@ class App extends React.PureComponent {
   });
 
   static defaultProps = {
-    selectedYear: 2018,
+    selectedYear: 2019,
     selectedDataset: "asd"
   };
 
   componentDidMount() {
-    const selectedYear = this.props.selectedYear === 1 ? '2018' : '2017';
+    const selectedYear = this.props.selectedYear === 1 ? '2019' : '2018';
     const formattedAsdPlaces = Object.keys(scores['asd'][selectedYear]).filter(it => Boolean(asdLocations[it])).map(place => {
       return ({
         name: place,
@@ -111,7 +111,7 @@ class App extends React.PureComponent {
   }
 
   getSelectedYearKey() {
-    return this.props.selectedYear === 2018 ? "1" : "2";
+    return this.props.selectedYear === 2019 ? "1" : "2";
   }
 
   // TODO: UPDATE THIS BROKEN SHIT
@@ -134,13 +134,16 @@ class App extends React.PureComponent {
   }
 
   async fetchSchoolData(barelyUpdatedYear) {
-    // http://payroll.alaskapolicyforum.net/peaks/?school_name=Susitna%20Elementary&year=2018
+    // http://payroll.alaskapolicyforum.net/peaks/?school_name=Susitna%20Elementary&year=2019
 
     const { selectedYear } = this.props;
     const { selectedSchool } = this.state;
     const year = barelyUpdatedYear ? barelyUpdatedYear : selectedYear;
+
     
-    const queryStr = qs.stringify({ school_name: selectedSchool, year });
+    
+    // NOTE! this year does not agree with the API's year, so we will subtract 1
+    const queryStr = qs.stringify({ school_name: selectedSchool, year: (year - 1) });
     const urlStr = `${BASE_API_URL}${queryStr}`;
 
     this.setState({ loadingSchool: true });
