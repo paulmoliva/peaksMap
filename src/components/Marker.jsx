@@ -19,8 +19,8 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
     color: black;
     z-index: 100;
 
-    bottom: 40px;
-    left: 0;
+    bottom: 30px;
+    left: -10px;
   `;
 
   const TopHalf = styled.div``;
@@ -49,7 +49,6 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
     left: 0;
     color: white;
   `;
-
 
   return (
     <InfoWindowContainer>
@@ -95,6 +94,7 @@ const MarkerIcon = styled(Icon)`
 
 const MarkerContainer = styled.div`
   position: relative;
+  z-index: ${props => props.show ? 100 : 'auto'};
 `;
 
 const getIconColor = averageScore => {
@@ -114,12 +114,16 @@ const getIconColor = averageScore => {
 const formatScores = (school, selectedScores) => {
   const currentScoresRaw = selectedScores[school];
   let formattedScores;
-  if (!currentScoresRaw || !currentScoresRaw["Math"] || !currentScoresRaw["ELA"]) {
+  if (
+    !currentScoresRaw ||
+    !currentScoresRaw["Math"] ||
+    !currentScoresRaw["ELA"]
+  ) {
     return null;
   } else {
     formattedScores = {
-      Math: parseInt(currentScoresRaw["Math"].replace(/(?!\.)(\D)/, '')),
-      ELA: parseInt(currentScoresRaw["ELA"].replace(/(?!\.)(\D)/, ''))
+      Math: parseInt(currentScoresRaw["Math"].replace(/(?!\.)(\D)/, "")),
+      ELA: parseInt(currentScoresRaw["ELA"].replace(/(?!\.)(\D)/, ""))
     };
   }
 
@@ -131,7 +135,7 @@ const formatScores = (school, selectedScores) => {
 };
 
 const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
-  if (!selectedScores[place.name]) return null
+  if (!selectedScores[place.name]) return null;
   const currentScores = formatScores(place.name, selectedScores);
   let averageScore = null;
 
@@ -142,7 +146,7 @@ const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
   const color = getIconColor(averageScore);
 
   return (
-    <MarkerContainer>
+    <MarkerContainer show={show}>
       <MarkerIcon type="home" theme="filled" color={color} />
       {show && (
         <InfoWindow
