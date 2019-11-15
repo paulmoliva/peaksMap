@@ -16,7 +16,10 @@ export const alaskaLocations = {
   "Arctic Light Elementary": { lng: -147.6909007, lat: 64.827111 },
   "Napaaqtugmiut School": { lng: -162.9878047, lat: 67.57190419999999 },
   "Barnette Magnet School": { lng: -147.7302535, lat: 64.8382293 },
-  "Star of the North Secondary School": { lng: -147.3476362, lat: 64.7639423 },
+  "Star of the North Secondary School": {
+    lng: -147.3476362,
+    lat: 64.7639423
+  },
   "Jack Egnaty Sr. School": { lng: -157.1695118, lat: 61.7015673 },
   "Lewis Angapak Memorial School": {
     lng: -162.6638999,
@@ -27,33 +30,54 @@ export const alaskaLocations = {
   "Yakutat School": { lng: -139.7231545, lat: 59.546622 },
   "Joy Elementary": { lng: -147.725054, lat: 64.8613759 },
   "Keet Gooshi Heen Elementary": { lng: -135.351763, lat: 57.0645712 },
-  "Ben Eielson Jr/Sr High School": { lng: -147.0746354, lat: 64.6746742 },
+  "Ben Eielson Jr/Sr High School": {
+    lng: -147.0746354,
+    lat: 64.6746742
+  },
   "East Elementary": { lng: -152.3937319, lat: 57.7936902 },
   Connections: { lng: -151.0681324, lat: 60.4911839 },
-  "Thunder Mountain High School": { lng: -134.5912527, lat: 58.37965729999999 },
+  "Thunder Mountain High School": {
+    lng: -134.5912527,
+    lat: 58.37965729999999
+  },
   "Igiugig School": { lng: -155.9039641, lat: 59.326148 },
   "Hoonah Elementary": { lng: -135.4408949, lat: 58.10815789999999 },
   "Anderson School": { lng: -149.1908007, lat: 64.343687 },
   "Allakaket School": { lng: -152.6520098, lat: 66.5632293 },
-  "Juneau Community Charter School": { lng: -134.406835, lat: 58.303069 },
+  "Juneau Community Charter School": {
+    lng: -134.406835,
+    lat: 58.303069
+  },
   "Craig Middle School": { lng: -133.1376775, lat: 55.4754991 },
-  "Eagle's View Elementary School": { lng: -166.5224915, lat: 53.8689243 },
+  "Eagle's View Elementary School": {
+    lng: -166.5224915,
+    lat: 53.8689243
+  },
   "Butte Elementary": { lng: -149.0062481, lat: 61.53665220000001 },
   "Palmer High School": { lng: -149.1367499, lat: 61.6055412 },
   "James C. Isabell School": { lng: -166.3666248, lat: 65.2636935 },
   "Colony High School": { lng: -149.2126949, lat: 61.6082098 },
-  "Howard Valentine Coffman Cove School": { lng: -132.827778, lat: 56.013889 },
+  "Howard Valentine Coffman Cove School": {
+    lng: -132.827778,
+    lat: 56.013889
+  },
   "Knik Elementary School": { lng: -149.611237, lat: 61.5404718 },
   "Chevak School": { lng: -165.5806, lat: 61.5279 },
   "Tsuk Taih School": { lng: -143.7272139, lat: 66.6477605 },
   "Crawford Elementary": { lng: -147.0724434, lat: 64.6748204 },
   "Sitka High School": { lng: -135.3405437, lat: 57.0618352 },
-  "Charles R. Leask Sr. Middle School": { lng: -131.5755661, lat: 55.1277774 },
+  "Charles R. Leask Sr. Middle School": {
+    lng: -131.5755661,
+    lat: 55.1277774
+  },
   HomeBRIDGE: { lng: -134.4241928, lat: 58.3029506 },
   "Alak School": { lng: -160.0351218, lat: 70.6366077 },
   "Rae C. Stedman Elementary": { lng: -132.9529174, lat: 56.8140478 },
   "McQueen School": { lng: -164.0662, lat: 67.6401 },
-  "George H. Gilson Middle School": { lng: -146.3596855, lat: 61.1376849 },
+  "George H. Gilson Middle School": {
+    lng: -146.3596855,
+    lat: 61.1376849
+  },
   "Kokhanok School": { lng: -154.7761111, lat: 59.4394444 },
   "Ella B. Vernetti School": { lng: -149.0993661, lat: 64.5568759 },
   "Gerstle River School": { lng: -145.1309516, lat: 63.8709517 },
@@ -61,9 +85,15 @@ export const alaskaLocations = {
   "Akiuk Memorial School": { lng: -162.5531201, lat: 60.859806 },
   "Glennallen Elementary": { lng: -145.5262375, lat: 62.1129729 },
   "Cantwell School": { lng: -148.8943859, lat: 63.3927929 },
-  "Aurora Borealis Charter School": { lng: -151.255, lat: 60.55410000000001 },
+  "Aurora Borealis Charter School": {
+    lng: -151.255,
+    lat: 60.55410000000001
+  },
   "Perryville School": { lng: -159.1435289, lat: 55.9116475 },
-  "New Horizons High School": { lng: -145.7135539, lat: 64.04279749999999 },
+  "New Horizons High School": {
+    lng: -145.7135539,
+    lat: 64.04279749999999
+  },
   "Alaska REACH Academy": { lng: -142.9798859, lat: 63.32740099999999 },
   "Weller Elementary": { lng: -147.5919846, lat: 64.8878522 },
   "Russian Mission School": { lng: -161.3301353, lat: 61.7872394 },
@@ -87,16 +117,28 @@ export const alaskaLocations = {
   "Manokotak School": { lng: -158.9549966, lat: 58.96577869999999 },
   "Arctic Village School": { lng: -145.5544101, lat: 68.11655 },
   "Glennallen Jr/Sr High School": { lng: -145.5262375, lat: 62.1129729 },
-  "Sidney C. Huntington Elementary": { lng: -156.8785866, lat: 64.7459576 },
+  "Sidney C. Huntington Elementary": {
+    lng: -156.8785866,
+    lat: 64.7459576
+  },
   "Port Alexander School": { lng: -134.6473449, lat: 56.25194370000001 },
   "Mentasta Lake School": { lng: -143.7978503, lat: 62.92937939999999 },
   "Tok School": { lng: -142.9935396, lat: 63.3229656 },
   "Chaputnguak School": { lng: -164.0380402, lat: 59.93646620000001 },
   "Rampart School": { lng: -150.156052, lat: 65.50738199999999 },
-  "Upstream Learning Correspondence": { lng: -145.5292469, lat: 62.11255 },
-  "Ket'acik/Aapalluk Memorial School": { lng: -135.4336857, lat: 59.2249789 },
+  "Upstream Learning Correspondence": {
+    lng: -145.5292469,
+    lat: 62.11255
+  },
+  "Ket'acik/Aapalluk Memorial School": {
+    lng: -135.4336857,
+    lat: 59.2249789
+  },
   "Delta Junction Elementary": { lng: -145.7108655, lat: 64.0402572 },
-  "Aqqaluk High/Noorvik Elementary": { lng: -161.0476947, lat: 66.8318833 },
+  "Aqqaluk High/Noorvik Elementary": {
+    lng: -161.0476947,
+    lat: 66.8318833
+  },
   "Fronteras Charter School": { lng: -149.3593763, lat: 61.6078698 },
   "Blackwell School": { lng: -155.5956489, lat: 62.95434280000001 },
   "Ninilchik School": { lng: -151.6749999, lat: 60.0433 },
@@ -118,7 +160,10 @@ export const alaskaLocations = {
   "Glacier View School": { lng: -147.7257882, lat: 61.79368659999999 },
   "Levelock School": { lng: -156.854402, lat: 59.113615 },
   "Valdez High School": { lng: -146.3572551, lat: 61.1383318 },
-  "Kenai Alternative High School": { lng: -151.2536017, lat: 60.5540273 },
+  "Kenai Alternative High School": {
+    lng: -151.2536017,
+    lat: 60.5540273
+  },
   "St George School": { lng: -169.58348, lat: 56.60604 },
   "Mat-Su Career & Tech Ed High School": {
     lng: -149.3634822,
@@ -140,7 +185,10 @@ export const alaskaLocations = {
   "Denali Elementary": { lng: -147.7486233, lat: 64.8401198 },
   "Mountain Village School": { lng: -163.7294445, lat: 62.0855556 },
   "Naukati School": { lng: -132.9587, lat: 55.8158 },
-  "Ketchikan Charter School": { lng: -131.6404152, lat: 55.34749859999999 },
+  "Ketchikan Charter School": {
+    lng: -131.6404152,
+    lat: 55.34749859999999
+  },
   "Hydaburg School": { lng: -132.8265201, lat: 55.2071774 },
   "Craig High School": { lng: -133.1286335, lat: 55.48846500000001 },
   "Fast Track": { lng: -131.6779814, lat: 55.3535718 },
@@ -151,7 +199,10 @@ export const alaskaLocations = {
   "Deering School": { lng: -162.7196142, lat: 66.0748587 },
   "Ladd Elementary": { lng: -147.6666869, lat: 64.8482456 },
   "Kalifornsky Beach Elementary": { lng: -151.139789, lat: 60.4870427 },
-  "Hoonah Jr/Sr High School": { lng: -135.4408949, lat: 58.10815789999999 },
+  "Hoonah Jr/Sr High School": {
+    lng: -135.4408949,
+    lat: 58.10815789999999
+  },
   "Kobuk School": { lng: -157.0309, lat: 66.902 },
   "Stikine Middle School": { lng: -132.3783226, lat: 56.4717578 },
   "Pearl Creek Elementary": { lng: -147.8144345, lat: 64.8911772 },
@@ -159,7 +210,10 @@ export const alaskaLocations = {
   "Iditarod Elementary": { lng: -149.4400267, lat: 61.58728929999999 },
   "Anna Tobeluk Memorial School": { lng: -162.45944, lat: 60.896946 },
   "Big Lake Elementary": { lng: -149.8186278, lat: 61.5400546 },
-  "Pioneer Peak Elementary": { lng: -149.2421441, lat: 61.60243259999999 },
+  "Pioneer Peak Elementary": {
+    lng: -149.2421441,
+    lat: 61.60243259999999
+  },
   "Fawn Mountain Elementary": { lng: -131.5690524, lat: 55.3120893 },
   "Skyview Middle School": { lng: -151.1010426, lat: 60.4579295 },
   "Johnnie John Sr. School": { lng: -159.5381969, lat: 61.569431 },
@@ -173,11 +227,17 @@ export const alaskaLocations = {
   "Watershed Charter School": { lng: -147.868292, lat: 64.827055 },
   "Auke Bay Elementary": { lng: -134.6478673, lat: 58.38901920000001 },
   "Nuiqsut Trapper School": { lng: -150.9995725, lat: 70.2204515 },
-  "George Morgan Sr. H.S.": { lng: -160.3467046, lat: 61.53246239999999 },
+  "George Morgan Sr. H.S.": {
+    lng: -160.3467046,
+    lat: 61.53246239999999
+  },
   "Chignik Lagoon School": { lng: -158.5367488, lat: 56.3088244 },
   "Diomede School": { lng: -168.9516484, lat: 65.7579915 },
   "Wasilla Middle School": { lng: -149.432754, lat: 61.5847536 },
-  "Twindly Bridge Charter School": { lng: -149.4496115, lat: 61.6142079 },
+  "Twindly Bridge Charter School": {
+    lng: -149.4496115,
+    lat: 61.6142079
+  },
   "Unalakleet School": { lng: -160.7957054, lat: 63.87668799999999 },
   "Meshik School": { lng: -158.6614287, lat: 56.9240142 },
   "Pilot Station School": { lng: -163.71571, lat: 62.097008 },
@@ -189,9 +249,15 @@ export const alaskaLocations = {
   "Peterson Elementary": { lng: -152.4963182, lat: 57.7471439 },
   "Maudrey J. Sommer School": { lng: -152.0571899, lat: 65.183174 },
   "McNeil Canyon Elementary": { lng: -151.258, lat: 59.7461 },
-  "Nikiski Middle/Senior High School": { lng: -151.2939999, lat: 60.7358 },
+  "Nikiski Middle/Senior High School": {
+    lng: -151.2939999,
+    lat: 60.7358
+  },
   "Nome-Beltz Jr/Sr High": { lng: -165.4064012, lat: 64.541966 },
-  "Finger Lake Elementary": { lng: -149.3043706, lat: 61.60908069999999 },
+  "Finger Lake Elementary": {
+    lng: -149.3043706,
+    lat: 61.60908069999999
+  },
   "Akiak School": { lng: -161.77869, lat: 60.79338000000001 },
   "Kuinerrarmiut Elitnaurviat": { lng: -161.8928259, lat: 59.7536573 },
   "Nikiski North Star Elementary": { lng: -151.2940001, lat: 60.6598 },
@@ -202,7 +268,10 @@ export const alaskaLocations = {
   "Chenega Bay School": { lng: -145.3490099, lat: 60.880188 },
   "Hunter Elementary": { lng: -147.7311105, lat: 64.8323576 },
   "Tanalian School": { lng: -154.3282433, lat: 60.19607919999999 },
-  "William Miller Memorial School": { lng: -161.9708994, lat: 60.6941545 },
+  "William Miller Memorial School": {
+    lng: -161.9708994,
+    lat: 60.6941545
+  },
   "Meadow Lakes Elementary": { lng: -149.62124, lat: 61.61069149999999 },
   "Karluk School": { lng: -154.4383351, lat: 57.560018 },
   "Raven School": { lng: -149.3587048, lat: 61.5698503 },
@@ -218,11 +287,17 @@ export const alaskaLocations = {
   "Naknek Elementary": { lng: -157.0058978, lat: 58.73306299999999 },
   "Burchell High School": { lng: -149.4949899, lat: 61.58024899999999 },
   "North Pole Elementary": { lng: -147.3494114, lat: 64.7520565 },
-  "William H. Seward Elementary School": { lng: -149.436127, lat: 60.1326988 },
+  "William H. Seward Elementary School": {
+    lng: -149.436127,
+    lat: 60.1326988
+  },
   "Trapper Creek Elementary": { lng: -150.3169867, lat: 62.315299 },
   "Dillingham Elementary": { lng: -158.4663152, lat: 59.0435533 },
   "Point Higgins School": { lng: -131.8194059, lat: 55.469795 },
-  "Susan B English School": { lng: -151.7129999, lat: 59.44159999999999 },
+  "Susan B English School": {
+    lng: -151.7129999,
+    lat: 59.44159999999999
+  },
   "Birchtree Charter School": { lng: -149.2738543, lat: 61.5980475 },
   "Kachemak Selo School": { lng: -151.074, lat: 59.79489999999999 },
   "Pelican School": { lng: -136.2346743, lat: 57.961403 },
@@ -240,8 +315,14 @@ export const alaskaLocations = {
   "Nordale Elementary": { lng: -147.6934172, lat: 64.8467508 },
   "Ayaprun School": { lng: -164.62944, lat: 60.94278 },
   "Minto School": { lng: -150.1203, lat: 65.13929999999999 },
-  "Chatham Correspondence": { lng: -134.5809501, lat: 57.50192299999999 },
-  "Kiita Learning Community": { lng: -156.7560854, lat: 71.30038139999999 },
+  "Chatham Correspondence": {
+    lng: -134.5809501,
+    lat: 57.50192299999999
+  },
+  "Kiita Learning Community": {
+    lng: -156.7560854,
+    lat: 71.30038139999999
+  },
   "Gastineau Elementary": { lng: -134.4009445, lat: 58.2791458 },
   "Wrangell High School": { lng: -132.3783383, lat: 56.47175060000001 },
   "Chignik Lake School": { lng: -158.7642002, lat: 56.2537337 },
@@ -249,17 +330,29 @@ export const alaskaLocations = {
   "Anne Wien Elementary": { lng: -147.7482831, lat: 64.8577145 },
   "Effie Kokrine Charter School": { lng: -147.8404077, lat: 64.8476697 },
   "Port Lions School": { lng: -152.8816529, lat: 57.86944739999999 },
-  "Midnight Sun Elementary School": { lng: -147.4128073, lat: 64.8045588 },
+  "Midnight Sun Elementary School": {
+    lng: -147.4128073,
+    lat: 64.8045588
+  },
   "Sitka REACH": { lng: -135.3307238, lat: 57.05376829999999 },
   "Sutton Elementary": { lng: -148.879977, lat: 61.716006 },
   "Martin L. Olson School": { lng: -163.02916, lat: 64.543335 },
   "Tetlin School": { lng: -142.5044, lat: 63.152203 },
   "Soldotna Prep School": { lng: -151.0961092, lat: 60.4887729 },
-  'William "Sonny" Nelson School': { lng: -157.4768028, lat: 59.3497076 },
+  'William "Sonny" Nelson School': {
+    lng: -157.4768028,
+    lat: 59.3497076
+  },
   "Palmer Middle School": { lng: -149.1088566, lat: 61.593649 },
-  "Akula Elitnaurvik School": { lng: -162.5174001, lat: 60.89529999999999 },
+  "Akula Elitnaurvik School": {
+    lng: -162.5174001,
+    lat: 60.89529999999999
+  },
   "Richard Johnson Elementary": { lng: -131.5756238, lat: 55.1278087 },
-  "Delta Junction High School": { lng: -145.7139712, lat: 64.04270149999999 },
+  "Delta Junction High School": {
+    lng: -145.7139712,
+    lat: 64.04270149999999
+  },
   "Redoubt Elementary": { lng: -151.1, lat: 60.4883 },
   "Eben Hopson Middle School": { lng: -156.7438075, lat: 71.298566 },
   "Denali PEAK": { lng: -151.0069842, lat: 63.06916889999999 },
@@ -269,15 +362,24 @@ export const alaskaLocations = {
   "Dena'ina Elementary School": { lng: -149.6923275, lat: 61.4989601 },
   "Kenai Middle School": { lng: -151.2061699, lat: 60.5627222 },
   "Haines Elementary": { lng: -135.455107, lat: 59.2352045 },
-  "Juneau-Douglas High School": { lng: -134.4293952, lat: 58.30477759999999 },
+  "Juneau-Douglas High School": {
+    lng: -134.4293952,
+    lat: 58.30477759999999
+  },
   "Gladys Dart School": { lng: -150.5832632, lat: 65.0057992 },
   "NWABSD Home School": { lng: -162.5844987, lat: 66.9020676 },
   "Beryozova School": { lng: -149.097384, lat: 61.61135890000001 },
   "Nuniwarmiut School": { lng: -166.20694, lat: 60.38916800000001 },
-  "Joann A. Alexie Memorial School": { lng: -162.2730555, lat: 60.8669444 },
+  "Joann A. Alexie Memorial School": {
+    lng: -162.2730555,
+    lat: 60.8669444
+  },
   "Fairbanks B.E.S.T.": { lng: -147.7163888, lat: 64.8377778 },
   "FOCUS Homeschool": { lng: -149.8483233, lat: 61.1363843 },
-  "Chinook Montessori Charter School": { lng: -147.7517151, lat: 64.8196061 },
+  "Chinook Montessori Charter School": {
+    lng: -147.7517151,
+    lat: 64.8196061
+  },
   "Zackar Levi Elementary": { lng: -159.5381969, lat: 61.569431 },
   "Woodriver Elementary": { lng: -147.870595, lat: 64.8393925 },
   "Merreline A Kangas School": { lng: -155.4869445, lat: 64.7394444 },
@@ -285,8 +387,14 @@ export const alaskaLocations = {
   "Fireweed Academy": { lng: -151.5680001, lat: 59.64399999999999 },
   "Pacific High School": { lng: -135.330349, lat: 57.05157699999999 },
   "Petersburg High School": { lng: -132.9550987, lat: 56.8150371 },
-  "Mendenhall River Community School": { lng: -134.5836014, lat: 58.4015429 },
-  "Midnight Sun Family Learning Center": { lng: -149.63476, lat: 61.5970523 },
+  "Mendenhall River Community School": {
+    lng: -134.5836014,
+    lat: 58.4015429
+  },
+  "Midnight Sun Family Learning Center": {
+    lng: -149.63476,
+    lat: 61.5970523
+  },
   "Crow Village Sam School": { lng: -159.2359621, lat: 61.583172 },
   "Main Elementary": { lng: -152.3912709, lat: 57.795436 },
   "North Star Elementary": { lng: -152.3676706, lat: 57.821598 },
@@ -302,7 +410,10 @@ export const alaskaLocations = {
     lat: 58.73306299999999
   },
   "Craig Elementary": { lng: -133.1376775, lat: 55.4754991 },
-  "University Park Elementary": { lng: -147.8461675, lat: 64.84562799999999 },
+  "University Park Elementary": {
+    lng: -147.8461675,
+    lat: 64.84562799999999
+  },
   "Angoon School": { lng: -134.5850085, lat: 57.4989706 },
   "Homer Middle School": { lng: -151.555, lat: 59.643 },
   "Revilla Jr/Sr High School": { lng: -131.6830184, lat: 55.3546353 },
@@ -312,18 +423,27 @@ export const alaskaLocations = {
   "Chief Ivan Blunka School": { lng: -157.3169, lat: 59.45129999999999 },
   "Homer Flex School": { lng: -151.519, lat: 59.64989999999999 },
   "Klawock City School": { lng: -133.0989365, lat: 55.5541407 },
-  "North Pole High School": { lng: -147.3687312, lat: 64.74645679999999 },
+  "North Pole High School": {
+    lng: -147.3687312,
+    lat: 64.74645679999999
+  },
   "SE Island Correspondence": { lng: -132.522799, lat: 55.682465 },
   "Kenai Central High School": { lng: -151.2122897, lat: 60.5612729 },
   "Fort Yukon School": { lng: -145.2524757, lat: 66.56443229999999 },
   "Tuluksak School": { lng: -160.9609999, lat: 61.1001 },
-  "Takotna Community School": { lng: -155.5956489, lat: 62.95434280000001 },
+  "Takotna Community School": {
+    lng: -155.5956489,
+    lat: 62.95434280000001
+  },
   "West Homer Elementary": { lng: -151.568, lat: 59.6435 },
   "Pilot Point School": { lng: -157.5728611, lat: 57.55785399999999 },
   "Seward Middle School": { lng: -149.441, lat: 60.13180000000001 },
   "Aleknagik School": { lng: -158.6261593, lat: 59.281219 },
   "Alternative Learning Systems": { lng: -147.7180017, lat: 64.8419047 },
-  "Dillingham Correspondence School": { lng: -158.4629222, lat: 59.0394768 },
+  "Dillingham Correspondence School": {
+    lng: -158.4629222,
+    lat: 59.0394768
+  },
   "Tukurngailnguq School": { lng: -161.1244721, lat: 65.97786839999999 },
   "Hooper Bay School": { lng: -166.0908, lat: 61.5331 },
   "Jimmy Huntington School": { lng: -156.3885774, lat: 65.7019667 },
@@ -334,13 +454,19 @@ export const alaskaLocations = {
   "Thorne Bay School": { lng: -132.5243325, lat: 55.689396 },
   "Newhalen School": { lng: -154.896122, lat: 59.7199971 },
   "Nunam Iqua School": { lng: -164.7896, lat: 62.5837 },
-  "Bristol Bay Correspondence": { lng: -157.0058978, lat: 58.73306299999999 },
+  "Bristol Bay Correspondence": {
+    lng: -157.0058978,
+    lat: 58.73306299999999
+  },
   "Kotzebue Middle/High School": { lng: -162.5844987, lat: 66.9020676 },
   "Saint Mary's School": { lng: -163.1784855, lat: 62.05344059999999 },
   "Sherrod Elementary": { lng: -149.1012503, lat: 61.6128988 },
   "Arviq School": { lng: -164.84329, lat: 60.488575 },
   "Kaltag School": { lng: -158.6931, lat: 64.331999 },
-  "Fred Ipalook Elementary": { lng: -156.7519679, lat: 71.29079899999999 },
+  "Fred Ipalook Elementary": {
+    lng: -156.7519679,
+    lat: 71.29079899999999
+  },
   "Ketchikan High School": { lng: -131.677921, lat: 55.3534308 },
   "Moose Pass School": { lng: -149.369, lat: 60.4875 },
   "Nenana City School": { lng: -149.0889311, lat: 64.5619758 },
@@ -366,7 +492,10 @@ export const alaskaLocations = {
     lng: -149.6987669,
     lat: 61.50311989999999
   },
-  "Negtemiut Elitnaurviat School": { lng: -164.7224104, lat: 60.4769318 },
+  "Negtemiut Elitnaurviat School": {
+    lng: -164.7224104,
+    lat: 60.4769318
+  },
   "Brevig Mission School": { lng: -166.5530999, lat: 65.3429 },
   "Chapman School": { lng: -151.8349212, lat: 59.77635799999999 },
   "Nome Youth Facility": { lng: -165.386075, lat: 64.4964181 },
@@ -376,25 +505,37 @@ export const alaskaLocations = {
     lat: 64.7459576
   },
   "Tebughna School": { lng: -151.137, lat: 61.0681 },
-  "Dillingham Middle/High School": { lng: -158.4646618, lat: 59.0423649 },
+  "Dillingham Middle/High School": {
+    lng: -158.4646618,
+    lat: 59.0423649
+  },
   "Nondalton School": { lng: -154.3282433, lat: 60.19607919999999 },
   "Davis-Ramoth School": { lng: -160.0147229, lat: 66.59880869999999 },
   "Koliganek School": { lng: -157.2779438, lat: 59.7273726 },
   "Talkeetna Elementary": { lng: -150.1084089, lat: 62.318088 },
   "Innoko River School": { lng: -159.5328205, lat: 62.6548484 },
-  "Kake Elementary & High School": { lng: -132.562, lat: 57.03919999999999 },
+  "Kake Elementary & High School": {
+    lng: -132.562,
+    lat: 57.03919999999999
+  },
   "Gladys Jung Elementary": { lng: -161.7732401, lat: 60.8032431 },
-  "Blatchley Middle School": { lng: -135.345066, lat: 57.05605929999999 },
+  "Blatchley Middle School": {
+    lng: -135.345066,
+    lat: 57.05605929999999
+  },
   "Houston Middle School": { lng: -149.7722676, lat: 61.5869975 },
   "Kali School": { lng: -163.01541, lat: 69.74419 },
   "Ouzinkie School": { lng: -152.5072502, lat: 57.92249489999999 },
   "Chignik Bay School": { lng: -158.7656379, lat: 56.2549611 },
   "Akhiok School": { lng: -154.1702778, lat: 56.9455556 },
-  "Auntie Mary Nicoli Elementary": { lng: -159.54071, lat: 61.58280999999999 },
+  "Auntie Mary Nicoli Elementary": {
+    lng: -159.54071,
+    lat: 61.58280999999999
+  },
   "Valley Pathways": { lng: -149.1675211, lat: 61.5911827 },
   "Togiak School": { lng: -160.4254525, lat: 59.055771 },
   "Golden Heart Academy": { lng: -147.8240668, lat: 64.8736505 },
-  "Lakeview Home School": { lng: -151.0681324, lat: 60.4911839 },
+  "Lakeview Home School": { lng: -156.669648, lat: 58.6982 },
   "Meade River School": { lng: -157.4158131, lat: 70.4779002 },
   "Larsen Bay School": { lng: -153.969298, lat: 57.53808799999999 },
   "Cooper Landing School": { lng: -149.806, lat: 60.495 },
@@ -405,7 +546,10 @@ export const alaskaLocations = {
   "Tustumena Elementary": { lng: -151.2638594, lat: 60.3076403 },
   "False Pass School": { lng: -163.2597999, lat: 54.7602 },
   "Danger Bay School": { lng: -152.3936869, lat: 57.79381420000001 },
-  "Ticasuk Brown Elementary": { lng: -147.5328976, lat: 64.82508659999999 },
+  "Ticasuk Brown Elementary": {
+    lng: -147.5328976,
+    lat: 64.82508659999999
+  },
   "Kwigillingok School": { lng: -163.1685371, lat: 59.876469 },
   "Cruikshank School": { lng: -147.3963999, lat: 66.35943999999999 },
   "Whale Pass School": { lng: -132.9544, lat: 55.8090999 },
@@ -418,11 +562,20 @@ export const alaskaLocations = {
   "Bethel Youth Facility": { lng: -161.8406609, lat: 60.78362139999999 },
   "King Cove School": { lng: -162.3204131, lat: 55.0605389 },
   "Soldotna Montessori Charter School": { lng: -151.069, lat: 60.4918 },
-  "Chief Paul Memorial School": { lng: -164.0380402, lat: 59.93646620000001 },
+  "Chief Paul Memorial School": {
+    lng: -164.0380402,
+    lat: 59.93646620000001
+  },
   "Nanwalek School": { lng: -151.921, lat: 59.3564 },
-  "Z. John Williams Memorial School": { lng: -161.701, lat: 60.89510000000001 },
+  "Z. John Williams Memorial School": {
+    lng: -161.701,
+    lat: 60.89510000000001
+  },
   "Emmonak School": { lng: -164.2, lat: 62.7738 },
-  "Metlakatla High School": { lng: -131.5772223, lat: 55.12647759999999 },
+  "Metlakatla High School": {
+    lng: -131.5772223,
+    lat: 55.12647759999999
+  },
   "Kaleidoscope School of Arts and Science": {
     lng: -151.279134,
     lat: 60.568701
@@ -435,9 +588,10 @@ export const alaskaLocations = {
     lng: -156.953719,
     lat: 64.74174599999999
   },
-  "Dzantik'i Heeni Middle School": { lng: -134.5145965, lat: 58.3630682 },
+  "Dzantik'i Heeni Middle School": {
+    lng: -134.5145965,
+    lat: 58.3630682
+  },
   "PACE Correspondence": { lng: -133.1383592, lat: 55.4749589 },
   "Tri-Valley School": { lng: -149.014349, lat: 63.8730693 }
 };
-
-
