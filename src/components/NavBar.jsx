@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Layout, Dropdown, Menu,  Icon, AutoComplete, Input } from "antd";
 import Logo from './Logo';
 import scores from '../data/scores'
+import MediaQuery from "react-responsive";
 
 const { Header } = Layout;
 
@@ -47,6 +48,22 @@ const yearMenu = (selectedYear, onChangeYear) => (
     <Menu.Item key="1">2019</Menu.Item>
     <Menu.Item key="2">2018</Menu.Item>
   </Menu>
+);
+
+const viewMenu = (selectedView, onChangeView) => (
+    <Menu
+        theme="light"
+        mode="horizontal"
+        selectedKeys={[selectedView]}
+        style={{ lineHeight: "64px" }}
+        onClick={info => {
+            const newView = info.key === "1" ? 'Map' : 'Table';
+            onChangeView(newView);
+        }}
+    >
+        <Menu.Item key="1">Map</Menu.Item>
+        <Menu.Item key="2">Table</Menu.Item>
+    </Menu>
 );
 
 const FilterIcon = styled(Icon)`
@@ -112,6 +129,7 @@ const AutoCompleteContainer = styled.div`
 
 
 export default ({
+  selectedView,
   selectedYear,
   selectedDatasetKey,
   onChangeFilter,
@@ -158,7 +176,10 @@ export default ({
             </a>
           </Dropdown>
         </div>
-
+      <div
+          className="dropdown-container"
+          style={{ marginRight: "10px", display: "inline" }}
+      >
         <Dropdown
           overlay={yearMenu(selectedYear, key => {
             onChangeFilter("year", key);
@@ -170,6 +191,20 @@ export default ({
             Select Year ({[null, 2019, 2018][selectedYear]})
           </a>
         </Dropdown>
+      </div>
+          <MediaQuery minWidth={7680}>
+              <Dropdown
+                  overlay={viewMenu(selectedView, key => {
+                      onChangeFilter("view", key);
+                  })}
+                  trigger={["click"]}
+              >
+                  <a className="ant-dropdown-link" href="#">
+                      <FilterIcon type="down" />
+                      View ({selectedView})
+                  </a>
+              </Dropdown>
+          </MediaQuery>
       </div>
     </FilterNav>
   </div>
