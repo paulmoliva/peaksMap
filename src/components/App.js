@@ -8,8 +8,7 @@ import { addUrlProps, UrlQueryParamTypes } from "react-url-query";
 import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
-import { asdLocations } from "../data/asd";
-import { alaskaLocations } from "../data/alaska";
+import allLocations from "../data/allLocations";
 import scores from "../data/scores"
 import {Fetch} from "react-request";
 import filterFactory, {textFilter, numberFilter, Comparator, multiSelectFilter} from 'react-bootstrap-table2-filter';
@@ -17,7 +16,8 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
-
+const asdLocations = allLocations;
+const alaskaLocations = allLocations;
 
 const qs = require("qs");
 const BASE_API_URL =
