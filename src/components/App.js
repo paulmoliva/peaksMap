@@ -193,7 +193,7 @@ class App extends React.PureComponent {
       const lastOpenIndex = selectedPlaces.findIndex(e => e.show);
 
       const index = selectedPlaces.findIndex(e => e.name === key);
-
+      if (index < 0) return state;
       // selectedPlaces[index].show = !selectedPlaces[index].show; // eslint-disable-line no-param-reassign
       selectedPlaces[index].show = true; // eslint-disable-line no-param-reassign
       if (lastOpenIndex !== -1) {
