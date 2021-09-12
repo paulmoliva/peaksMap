@@ -22,7 +22,8 @@ const qs = require("qs");
 const BASE_API_URL =
   "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
   // 'http://localhost:5000/peaks?'
-const SCORES_API_URL = "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/scores?";
+const SCORES_API_URL = 
+"http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/scores?";
 // 'http://localhost:5000/scores?'
 const { Content } = Layout;
 
@@ -65,12 +66,16 @@ class App extends React.PureComponent {
   });
 
   static defaultProps = {
-    selectedYear: 2019,
+    selectedYear: 2020,
     selectedDataset: "asd",
     selectedView: 'Map'
   };
 
   async componentDidMount() {
+    await this.resetPlaces();
+  }
+
+  async resetPlaces() {
     await this.getAllScores(this.props.selectedYear, this.props.selectedDataset === 'asd');
 
     const { scores } = this.state;
@@ -80,7 +85,7 @@ class App extends React.PureComponent {
         lat: asdLocations[place].lat,
         lng: asdLocations[place].lng,
         show: false
-      })
+      });
     });
 
     const formattedAlaskaPlaces = Object.keys(scores).filter(it => Boolean(alaskaLocations[it])).map(place => {
@@ -89,7 +94,7 @@ class App extends React.PureComponent {
         lat: alaskaLocations[place].lat,
         lng: alaskaLocations[place].lng,
         show: false
-      })
+      });
     });
 
     this.setState({
@@ -100,29 +105,24 @@ class App extends React.PureComponent {
   async onChangeFilter(filter, key) {
     const { onChangeUrlQueryParams } = this.props;
     if (filter === "year") {
-      onChangeUrlQueryParams({
+      await onChangeUrlQueryParams({
         selectedYear: key
       });
       await this.getAllScores(key, this.props.selectedDataset === 'asd')
       this.fetchSchoolData(key);
-      // this.setState({ selectedYear: key }, () => {
-      // });
     } else if (filter === 'view') {
-      onChangeUrlQueryParams({
+      await onChangeUrlQueryParams({
         selectedView: key
       });
     } else {
       // switch district
-      onChangeUrlQueryParams({
+      await onChangeUrlQueryParams({
         selectedDataset: key
       });
-
-      await this.getAllScores(this.props.selectedYear, key === '1')
+      
+      await this.resetPlaces();
 
       this.closeAllInfowindows(key);
-      // this.setState({ selectedDataset: key }, () => {
-      //   this.closeAllInfowindows();
-      // });
     }
   }
 
@@ -155,16 +155,16 @@ class App extends React.PureComponent {
     this.setState(state => {
       // get the old open one too
 
-      const selectedPlaces = this.getSelectedPlaces(selectedDataset);
+      const selectedPlaces = this.getSelectedPlaces(selectedDataset === 'asd' ? selectedDataset : 'alaska');
       const showResetPlaces = selectedPlaces.map(place => ({
         ...place,
         show: false
       }));
 
       if (selectedDataset === "asd") {
-        return { places: { ...this.state.places, asd: showResetPlaces } };
-      } else {
         return { places: { ...this.state.places, alaska: showResetPlaces } };
+      } else {
+        return { places: { ...this.state.places, asd: showResetPlaces } };
       }
     });
   }

@@ -45,7 +45,7 @@ const yearMenu = (selectedYear, onChangeYear) => (
       onChangeYear(newYear);
     }}
   >
-    {/* <Menu.Item key="3">2020</Menu.Item> */}
+    <Menu.Item key="3">2020</Menu.Item>
     <Menu.Item key="1">2019</Menu.Item>
     <Menu.Item key="2">2018</Menu.Item>
   </Menu>
