@@ -9,7 +9,6 @@ import SideBar from "./SideBar";
 import MapContainer from "./MapContainer";
 import NavBar from "./NavBar";
 import allLocations from "../data/allLocations";
-import scores from "../data/scores"
 import {Fetch} from "react-request";
 import filterFactory, {textFilter, numberFilter, Comparator, multiSelectFilter} from 'react-bootstrap-table2-filter';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -22,7 +21,9 @@ const alaskaLocations = allLocations;
 const qs = require("qs");
 const BASE_API_URL =
   "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
-
+  // 'http://localhost:5000/peaks?'
+const SCORES_API_URL = "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/scores?";
+// 'http://localhost:5000/scores?'
 const { Content } = Layout;
 
 // http://grid.malven.co/
@@ -59,7 +60,8 @@ class App extends React.PureComponent {
     places: {
       asd: [],
       alaska: []
-    }
+    },
+    scores: {}
   });
 
   static defaultProps = {
@@ -68,9 +70,11 @@ class App extends React.PureComponent {
     selectedView: 'Map'
   };
 
-  componentDidMount() {
-    const selectedYear = this.props.selectedYear === 1 ? '2019' : '2018';
-    const formattedAsdPlaces = Object.keys(scores['asd'][selectedYear]).filter(it => Boolean(asdLocations[it])).map(place => {
+  async componentDidMount() {
+    await this.getAllScores(this.props.selectedYear, this.props.selectedDataset === 'asd');
+
+    const { scores } = this.state;
+    const formattedAsdPlaces = Object.keys(scores).filter(it => Boolean(asdLocations[it])).map(place => {
       return ({
         name: place,
         lat: asdLocations[place].lat,
@@ -79,7 +83,7 @@ class App extends React.PureComponent {
       })
     });
 
-    const formattedAlaskaPlaces = Object.keys(scores['alaska'][selectedYear]).filter(it => Boolean(alaskaLocations[it])).map(place => {
+    const formattedAlaskaPlaces = Object.keys(scores).filter(it => Boolean(alaskaLocations[it])).map(place => {
       return ({
         name: place,
         lat: alaskaLocations[place].lat,
@@ -93,12 +97,13 @@ class App extends React.PureComponent {
     });
   }
 
-  onChangeFilter(filter, key) {
+  async onChangeFilter(filter, key) {
     const { onChangeUrlQueryParams } = this.props;
     if (filter === "year") {
       onChangeUrlQueryParams({
         selectedYear: key
       });
+      await this.getAllScores(key, this.props.selectedDataset === 'asd')
       this.fetchSchoolData(key);
       // this.setState({ selectedYear: key }, () => {
       // });
@@ -112,6 +117,8 @@ class App extends React.PureComponent {
         selectedDataset: key
       });
 
+      await this.getAllScores(this.props.selectedYear, key === '1')
+
       this.closeAllInfowindows(key);
       // this.setState({ selectedDataset: key }, () => {
       //   this.closeAllInfowindows();
@@ -119,12 +126,28 @@ class App extends React.PureComponent {
     }
   }
 
+  async getAllScores(year, isAsd) {
+    const res = await fetch(`${SCORES_API_URL}year=${year}&asd=${isAsd}`);
+    const allScores = await res.json();
+    const scores = allScores.reduce((acc, score) => {
+      return {
+        ...acc,
+        [score['school_name']]: {
+          ...acc[score['school_name']],
+          [score['Subject']]: score['NotProficientPercent']
+        }
+      }
+    }, {})
+      this.setState({scores});
+      console.log(scores)
+  }
+
   getSelectedDatasetKey() {
     return this.props.selectedDataset === 'asd' ? "1"  : "2";
   }
 
   getSelectedYearKey() {
-    return this.props.selectedYear === 2019 ? "1" : "2";
+    return this.props.selectedYear === 2019 ? "1" : this.props.selectedYear === 2020 ? "3" : "2";
   }
 
   // TODO: UPDATE THIS BROKEN SHIT
@@ -155,8 +178,7 @@ class App extends React.PureComponent {
 
 
 
-    // NOTE! this year does not agree with the API's year, so we will subtract 1
-    const queryStr = qs.stringify({ school_name: selectedSchool, year: (year - 1) });
+    const queryStr = qs.stringify({ school_name: selectedSchool, year: (year) });
     const urlStr = `${BASE_API_URL}${queryStr}`;
 
     this.setState({ loadingSchool: true });
@@ -209,7 +231,7 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { places } = this.state;
+    const { places, scores } = this.state;
 
     const { selectedDataset } = this.props;
 
@@ -218,7 +240,7 @@ class App extends React.PureComponent {
         ? locationCoordinates.asd
         : locationCoordinates.alaska;
     console.log(selectedDataset, this.props)
-    const selectedScores = scores[selectedDataset][this.props.selectedYear];
+    const selectedScores = scores;
 
     const selectedSchoolCoordinates =
       selectedDistrictCoordinates[this.state.selectedSchool];
@@ -240,7 +262,7 @@ class App extends React.PureComponent {
             this.switchSchoolAndFetch(school);
             this.toggleShowInfo(school);
           }}
-          locationKeys={Object.keys(selectedDistrictCoordinates)}
+          scores={scores}
         />
         {/* https://ant.design/components/modal/ */}
         <MediaQuery maxWidth={768}>

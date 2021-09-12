@@ -41,10 +41,11 @@ const yearMenu = (selectedYear, onChangeYear) => (
     selectedKeys={[selectedYear]}
     style={{ lineHeight: "64px" }}
     onClick={info => {
-      const newYear = info.key === "1" ? 2019 : 2018;
+      const newYear = info.key === "1" ? 2019 : info.key === "3" ? 2020 : 2018;
       onChangeYear(newYear);
     }}
   >
+    {/* <Menu.Item key="3">2020</Menu.Item> */}
     <Menu.Item key="1">2019</Menu.Item>
     <Menu.Item key="2">2018</Menu.Item>
   </Menu>
@@ -134,14 +135,14 @@ export default ({
   selectedDatasetKey,
   onChangeFilter,
   onSelectSchool,
-  locationKeys
+  scores
 }) => (
   <div>
     <MainNav className="header MainNav">
       <AutoCompleteContainer className="AutoCompleteContainer">
         <AutoComplete
           style={{ width: "100%", zIndex: 100 }}
-          dataSource={Object.keys(scores[[null, 'asd', 'alaska'][selectedDatasetKey]][[null, '2019', '2018'][selectedYear]])}
+          dataSource={Object.keys(scores)}
           onSelect={onSelectSchool}
           placeholder="Search by school name"
           filterOption={(inputValue, option) =>
@@ -188,7 +189,7 @@ export default ({
         >
           <a className="ant-dropdown-link" href="#">
             <FilterIcon type="down" />
-            Select Year ({[null, 2019, 2018][selectedYear]})
+            Select Year ({[null, 2019, 2018, 2020][selectedYear]})
           </a>
         </Dropdown>
       </div>
