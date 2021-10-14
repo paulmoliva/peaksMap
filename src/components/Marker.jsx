@@ -67,10 +67,10 @@ const InfoWindow = ({ place, toggleShowInfo, scores }) => {
         {scores ? (
           <div>
             <Paragraph>
-              <Text strong>{scores["ELA"]}%</Text> below proficiency in ELA
+              <Text strong>{scores["ELA"] || 'Unknown'}%</Text> below proficiency in ELA
             </Paragraph>
             <Paragraph>
-              <Text strong>{scores["Math"]}%</Text> below proficiency in Math
+              <Text strong>{scores["Math"] || 'Unknown'}%</Text> below proficiency in Math
             </Paragraph>
           </div>
         ) : (
@@ -115,15 +115,15 @@ const formatScores = (school, selectedScores) => {
   const currentScoresRaw = selectedScores[school];
   let formattedScores;
   if (
-    !currentScoresRaw ||
-    !currentScoresRaw["Math"] ||
-    !currentScoresRaw["ELA"]
+    !currentScoresRaw
   ) {
-    return null;
+    return { Math: null, ELA: null };
   } else {
+    const mathRaw = currentScoresRaw["Math"].replace(/(?!\.)(\D)/, "")
+    const elaRaw = currentScoresRaw["ELA"].replace(/(?!\.)(\D)/, "")
     formattedScores = {
-      Math: parseInt(currentScoresRaw["Math"].replace(/(?!\.)(\D)/, "")),
-      ELA: parseInt(currentScoresRaw["ELA"].replace(/(?!\.)(\D)/, ""))
+      Math: mathRaw ? parseInt(mathRaw) : null,
+      ELA: elaRaw ? parseInt(elaRaw) : null
     };
   }
 
@@ -141,9 +141,9 @@ const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
 
   if (currentScores && currentScores.Math && currentScores.ELA) {
     averageScore = (currentScores.Math + currentScores.ELA) / 2;
-  } else if (currentScores.ELA) {
+  } else if (currentScores && currentScores.ELA) {
     averageScore = currentScores.ELA
-  } else if (currentScores.Math) {
+  } else if (currentScores && currentScores.Math) {
     averageScore = currentScores.Math
   }
 
