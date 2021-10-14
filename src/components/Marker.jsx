@@ -139,8 +139,12 @@ const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
   const currentScores = formatScores(place.name, selectedScores);
   let averageScore = null;
 
-  if (currentScores) {
+  if (currentScores.Math && currentScores.ELA) {
     averageScore = (currentScores.Math + currentScores.ELA) / 2;
+  } else if (currentScores.ELA) {
+    averageScore = currentScores.ELA
+  } else if (currentScores.Math) {
+    averageScore = currentScores.Math
   }
 
   const color = getIconColor(averageScore);

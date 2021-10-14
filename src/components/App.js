@@ -20,11 +20,11 @@ const alaskaLocations = allLocations;
 
 const qs = require("qs");
 const BASE_API_URL =
-  "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
-  // 'http://localhost:5000/peaks?'
+  // "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/peaks?";
+  'http://localhost:5000/peaks?'
 const SCORES_API_URL = 
-"http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/scores?";
-// 'http://localhost:5000/scores?'
+// "http://payroll-env2.d3mfd6heik.us-west-2.elasticbeanstalk.com/scores?";
+'http://localhost:5000/scores?'
 const { Content } = Layout;
 
 // http://grid.malven.co/
