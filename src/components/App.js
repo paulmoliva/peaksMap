@@ -66,8 +66,8 @@ class App extends React.PureComponent {
   });
 
   static defaultProps = {
-    selectedYear: 2020,
-    selectedDataset: "asd",
+    selectedYear: 2021,
+    selectedDataset: "alaska",
     selectedView: 'Map'
   };
 
@@ -147,7 +147,7 @@ class App extends React.PureComponent {
   }
 
   getSelectedYearKey() {
-    return this.props.selectedYear === 2019 ? "1" : this.props.selectedYear === 2020 ? "3" : "2";
+    return this.props.selectedYear === 2019 ? "1" : this.props.selectedYear === 2021 ? "3" : "2";
   }
 
   // TODO: UPDATE THIS BROKEN SHIT
