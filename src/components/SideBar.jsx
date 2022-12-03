@@ -82,6 +82,11 @@ const WelcomeDetails = () => (
       Alternatively, type a school name into the search bar and select the
       corresponding search result.
     </Paragraph>
+    <Paragraph>
+      The Performance Evaluation for Alaska's Schools (PEAKS) examination was in effect from 2018 to 2021. The Alaska
+      Department of Education switched to the Alaska System of Academic Readiness (AK STAR) examination in 2022.
+      All results may be found <a style={{ color: "lightblue"}} href src="https://education.alaska.gov/assessments/results">here</a>.
+    </Paragraph>
     <MediaQuery maxWidth={768}>
         <LegendItem initialRange={0} finalRange={30}>Below 50%</LegendItem>
         <LegendItem initialRange={31} finalRange={50}></LegendItem>

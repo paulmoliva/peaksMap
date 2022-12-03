@@ -41,13 +41,19 @@ const yearMenu = (selectedYear, onChangeYear) => (
     selectedKeys={[selectedYear]}
     style={{ lineHeight: "64px" }}
     onClick={info => {
-      const newYear = info.key === "1" ? 2019 : info.key === "3" ? 2021 : 2018;
+      const newYear = {
+        "1": 2018,
+        "2": 2019,
+        "3": 2021,
+        "4": 2022,
+      }[info.key]
       onChangeYear(newYear);
     }}
   >
+    <Menu.Item key="4">2022</Menu.Item>
     <Menu.Item key="3">2021</Menu.Item>
-    <Menu.Item key="1">2019</Menu.Item>
-    <Menu.Item key="2">2018</Menu.Item>
+    <Menu.Item key="2">2019</Menu.Item>
+    <Menu.Item key="1">2018</Menu.Item>
   </Menu>
 );
 
@@ -189,7 +195,7 @@ export default ({
         >
           <a className="ant-dropdown-link" href="#">
             <FilterIcon type="down" />
-            Select Year ({[null, 2019, 2018, 2021][selectedYear]})
+            Select Year ({[null, 2019, 2018, 2021, 2022][selectedYear]})
           </a>
         </Dropdown>
       </div>
