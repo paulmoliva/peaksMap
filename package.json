@@ -8,7 +8,7 @@
     "craco-antd": "^1.12.0",
     "google-map-react": "^1.1.4",
     "history": "^4.10.1",
-    "qs": "^6.9.0",
+    "qs": "^6.9.7",
     "react": "^16.9.0",
     "react-bootstrap-table-next": "^3.2.1",
     "react-bootstrap-table2-filter": "^1.2.0",
