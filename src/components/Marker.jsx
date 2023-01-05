@@ -99,6 +99,7 @@ const MarkerContainer = styled.div`
 
 const getIconColor = averageScore => {
   if (!averageScore) {
+    console.log('white')
     return "white";
   }
 
@@ -146,7 +147,7 @@ const Marker = ({ place, toggleShowInfo, show, selectedScores }) => {
   } else if (currentScores && currentScores.Math) {
     averageScore = currentScores.Math
   }
-
+  console.log(averageScore, place)
   const color = getIconColor(averageScore);
 
   return (
