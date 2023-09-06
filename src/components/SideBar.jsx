@@ -69,10 +69,9 @@ const LegendItem = ({ initialRange, finalRange }) => {
 
 const WelcomeDetails = () => (
   <WelcomeDetailsStyle>
-    <Title>PEAKS Data Map</Title>
+    <Title>Public School Performance Map</Title>
     <Paragraph>
-      Welcome to the Alaska Policy Forum Interactive Performance Evaluation for
-      Alaska's Schools (PEAKS) Data Map.
+      Welcome to the Alaska Policy Forum Interactive Public School Performance Data Map.
     </Paragraph>
     <Paragraph>
       Click a pin on the map to view test scores for that school.
